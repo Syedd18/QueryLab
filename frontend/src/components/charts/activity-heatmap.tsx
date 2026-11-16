@@ -8,13 +8,13 @@ interface Day {
   count: number;
 }
 
-// GitHub's contribution palette (light + dark), a single-hue green ramp.
+// GitHub's contribution palette (light + dark).
 const LEVEL_CLASS = [
-  "bg-[#e1e4e8] dark:bg-[#22272b]",
-  "bg-[#b8cdbb] dark:bg-[#3b5140]",
-  "bg-[#91ad96] dark:bg-[#526f59]",
-  "bg-[#729c7c] dark:bg-[#729c7c]",
-  "bg-[#567c5f] dark:bg-[#91ad96]",
+  "bg-[#ebedf0] dark:bg-[#161b22]",
+  "bg-[#9be9a8] dark:bg-[#0e4429]",
+  "bg-[#40c463] dark:bg-[#006d32]",
+  "bg-[#30a14e] dark:bg-[#26a641]",
+  "bg-[#216e39] dark:bg-[#39d353]",
 ];
 
 function level(count: number): number {
