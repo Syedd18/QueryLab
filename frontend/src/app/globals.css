@@ -128,6 +128,8 @@
   /* Geist for the interface, JetBrains Mono for anything technical. */
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Space Grotesk carries the qryntiq logotype. */
+  --font-brand: "Space Grotesk", "Geist", ui-sans-serif, system-ui, sans-serif;
 
   /* Type scale: 11 / 12 / 13 / 14 / 16 / 18 / 22 / 28 / 32 */
   --text-*: initial;

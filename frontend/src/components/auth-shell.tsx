@@ -156,8 +156,20 @@ function BrandPanel() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <LogoMark style={{ color: D.accent }} />
-          <span className="text-md font-semibold tracking-tight" style={{ color: D.white }}>
-            qryntiq
+          <span
+            className="select-none font-brand text-[1.0625rem] font-semibold leading-none tracking-[-0.015em]"
+            style={{ color: D.white }}
+          >
+            qrynt
+            <span className="relative inline-block">
+              {"ı"}
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[0.14em] size-[0.16em] -translate-x-1/2 rounded-full"
+                style={{ backgroundColor: D.accent }}
+              />
+            </span>
+            q
           </span>
         </div>
         <span

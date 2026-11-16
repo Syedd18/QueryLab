@@ -30,8 +30,9 @@ export function LogoMark({
         fill={`url(#${gid}-cyl)`}
         d="M6 10.5C6 7.46 11.37 5 18 5s12 2.46 12 5.5v13c0 3.04-5.37 5.5-12 5.5S6 26.54 6 23.5v-13Z"
       />
-      {/* top disk */}
+      {/* top disk + rim highlight */}
       <ellipse cx="18" cy="10.5" rx="12" ry="5.5" fill="#D6E2EF" />
+      <ellipse cx="18" cy="10" rx="9" ry="3.6" fill="none" stroke="#EAF1F7" strokeWidth="1.1" opacity="0.7" />
       {/* band separators */}
       <path
         stroke="#5C7E9E"
@@ -57,6 +58,28 @@ export function LogoMark({
   );
 }
 
+/** The qryntiq logotype: Space Grotesk, tight tracking, accent dot on the i. */
+export function Wordmark({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "select-none font-brand text-[1.0625rem] font-semibold leading-none tracking-[-0.015em] text-fg",
+        className
+      )}
+    >
+      qrynt
+      <span className="relative inline-block">
+        {"ı"}
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-[0.14em] size-[0.16em] -translate-x-1/2 rounded-full bg-accent-text"
+        />
+      </span>
+      q
+    </span>
+  );
+}
+
 export function Logo({
   compact = false,
   className,
@@ -65,11 +88,9 @@ export function Logo({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center gap-2.5", className)}>
+    <div className={cn("flex items-center gap-2", className)}>
       <LogoMark />
-      {!compact && (
-        <span className="truncate text-md font-semibold tracking-tight text-fg">qryntiq</span>
-      )}
+      {!compact && <Wordmark />}
     </div>
   );
 }
