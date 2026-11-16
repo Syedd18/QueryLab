@@ -197,22 +197,27 @@ Important API areas include:
 ### Backend on Render or another Python host
 
 1. Create a Python web service using the `backend` directory as its root.
-2. Set the build command to install dependencies and generate the SQLite
+2. Set the service's Python version to **3.12.10**. The repository's
+   `.python-version` file pins Render to this version. Remove any
+   `PYTHON_VERSION` override in the Render environment, or set it to `3.12.10`.
+   Python 3.14 currently causes the pinned `pydantic-core==2.23.4` dependency
+   to build from source during deployment.
+3. Set the build command to install dependencies and generate the SQLite
    sandbox databases:
 
    ```bash
    pip install -r requirements.txt && python scripts/prepare_sandboxes.py
    ```
 
-3. Start command:
+4. Start command:
 
    ```bash
    uvicorn app.main:app --host 0.0.0.0 --port $PORT
    ```
 
-4. Configure `DATABASE_URL`, `SECRET_KEY`, `ALGORITHM`,
+5. Configure `DATABASE_URL`, `SECRET_KEY`, `ALGORITHM`,
    `ACCESS_TOKEN_EXPIRE_MINUTES`, `CORS_ORIGINS`, and `SANDBOX_DB_DIR`.
-5. Add the deployed frontend origin to `CORS_ORIGINS`.
+6. Add the deployed frontend origin to `CORS_ORIGINS`.
 
 The sandbox-preparation command creates `practice.db`, `practice_v2.db`, and
 `practice_tech.db` inside `SANDBOX_DB_DIR` and validates the company question
