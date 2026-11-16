@@ -1,254 +1,221 @@
-# 🗃️ SQL Practice Platform
+# QueryLab
 
-A production-ready SQL practice platform similar to LeetCode + StrataScratch, featuring real SQL execution, JWT authentication, progress tracking, XP system, leaderboard, and a full admin panel.
+QueryLab is a full-stack SQL practice workspace for learning, practicing, and
+evaluating SQL against realistic sandbox databases. It combines a FastAPI API,
+a Next.js interface, Supabase PostgreSQL persistence, and isolated SQLite
+databases for query execution.
 
-![SQL Practice Platform](https://img.shields.io/badge/Status-Production--Ready-brightgreen)
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Python](https://img.shields.io/badge/Python-3.12-yellow)
+## Features
 
----
+- SQL practice library with categories, difficulty levels, companies, tags, and search
+- Monaco-powered SQL editor with syntax highlighting and `Ctrl+Enter` execution
+- Query execution and result comparison against expected solutions
+- JWT authentication with password hashing and protected user features
+- Dashboard progress tracking, XP, streaks, activity history, and leaderboard
+- Bookmarks, reports, profile management, and admin question management
+- Responsive light and dark themes
+- API rate limiting and configurable CORS
 
-## ✨ Features
+## Architecture
 
-### Core
-- 🔐 **JWT Authentication** — Secure signup, login, and protected routes
-- 📝 **100+ SQL Challenges** — From basic SELECT to advanced window functions
-- ⚡ **Real SQL Execution** — Execute queries against a sandboxed SQLite database
-- 📊 **Instant Feedback** — Compare results against expected output
-- 🏆 **XP & Streak System** — Earn points and maintain daily streaks
+| Layer | Technology |
+| --- | --- |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| Data fetching | TanStack Query |
+| Editor | Monaco Editor |
+| Backend | FastAPI, Uvicorn, SQLAlchemy |
+| Main database | PostgreSQL through Supabase |
+| Query sandbox | SQLite |
+| Authentication | JWT, Passlib/Bcrypt |
 
-### UI/UX
-- 🌗 **Dark/Light Mode** — Premium theme with glassmorphism
-- 📱 **Fully Responsive** — Works on desktop, tablet, and mobile
-- 🎨 **Monaco SQL Editor** — Syntax highlighting, autocomplete, Ctrl+Enter
-- 📈 **Dashboard Analytics** — Weekly activity, difficulty breakdown, accuracy
-- 🥇 **Leaderboard** — Top-3 podium with global rankings
+## Repository layout
 
-### Admin
-- ➕ **CRUD Questions** — Create, edit, delete questions
-- 📂 **Manage Categories** — Organize questions by SQL topic
-- 🔍 **Search & Filter** — Find questions quickly
-
----
-
-## 📸 Screenshots
-
-> Screenshots placeholder — run the app locally to see the UI
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
-| Technology | Purpose |
-|---|---|
-| Next.js 15 (App Router) | React framework |
-| TypeScript | Type safety |
-| Tailwind CSS | Styling |
-| Monaco Editor | SQL editor |
-| TanStack Query | Server state |
-| Framer Motion | Animations |
-| Lucide Icons | Icon library |
-
-### Backend
-| Technology | Purpose |
-|---|---|
-| FastAPI | API framework |
-| SQLAlchemy | ORM |
-| Pydantic | Data validation |
-| JWT (python-jose) | Authentication |
-| Alembic | Migrations |
-| SQLite | SQL sandbox |
-
-### Database
-| Technology | Purpose |
-|---|---|
-| Supabase PostgreSQL | Main database |
-| SQLite (read-only) | Query sandbox |
-
----
-
-## 📁 Project Structure
-
-```
-sql-practice/
-├── frontend/                # Next.js 15 frontend
-│   ├── src/
-│   │   ├── app/             # App Router pages
-│   │   │   ├── (app)/       # Authenticated layout
-│   │   │   │   ├── dashboard/
-│   │   │   │   ├── practice/
-│   │   │   │   ├── categories/
-│   │   │   │   ├── bookmarks/
-│   │   │   │   ├── leaderboard/
-│   │   │   │   ├── profile/
-│   │   │   │   └── admin/
-│   │   │   ├── login/
-│   │   │   ├── signup/
-│   │   │   └── page.tsx     # Landing page
-│   │   ├── components/      # Reusable components
-│   │   └── lib/             # Utilities & API client
-│   └── package.json
-│
-├── backend/                 # FastAPI backend
+```text
+QueryLab/
+├── backend/
 │   ├── app/
-│   │   ├── routers/         # API route handlers
-│   │   ├── models/          # SQLAlchemy models
-│   │   ├── schemas/         # Pydantic schemas
-│   │   ├── services/        # Business logic
-│   │   ├── database/        # DB config & seeds
-│   │   ├── config.py        # Settings
-│   │   └── main.py          # App entry point
-│   ├── sandbox_dbs/         # SQLite databases
+│   │   ├── database/       # Database session and seed logic
+│   │   ├── models/         # SQLAlchemy models
+│   │   ├── routers/        # API endpoints
+│   │   ├── schemas/        # Pydantic request/response schemas
+│   │   ├── services/       # Authentication and SQL execution
+│   │   └── main.py         # FastAPI application
+│   ├── scripts/            # Dataset and Supabase setup scripts
 │   └── requirements.txt
-│
+├── frontend/
+│   ├── src/app/            # Next.js routes and layouts
+│   ├── src/components/     # Shared UI and product components
+│   ├── src/lib/            # API client and application context
+│   └── package.json
 └── README.md
 ```
 
----
+## Requirements
 
-## 🚀 Getting Started
+- Node.js 18 or newer
+- Python 3.10 or newer
+- A PostgreSQL database; Supabase is recommended
 
-### Prerequisites
-- **Node.js** >= 18
-- **Python** >= 3.10
-- **PostgreSQL** (or Supabase account)
+## Local development
 
 ### 1. Clone the repository
+
 ```bash
-git clone https://github.com/your-username/sql-practice.git
-cd sql-practice
+git clone https://github.com/Syedd18/QueryLab.git
+cd QueryLab
 ```
 
-### 2. Backend Setup
-```bash
+### 2. Configure the backend
+
+Create a virtual environment and install the Python dependencies:
+
+```powershell
 cd backend
-
-# Create virtual environment
 python -m venv venv
-
-# Activate (Windows)
-venv\Scripts\activate
-
-# Activate (macOS/Linux)
-source venv/bin/activate
-
-# Install dependencies
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your database credentials
-
-# Seed the database
-python -m app.database.seed
-
-# Start the server
-uvicorn app.main:app --reload --port 8000
 ```
 
-### 3. Frontend Setup
-```bash
-cd frontend
+Copy the environment template:
 
-# Install dependencies
-npm install
-
-# Configure environment
-# .env.local is already configured for local development
-
-# Start dev server
-npm run dev
+```powershell
+Copy-Item .env.example .env
 ```
 
-### 4. Access the app
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000/api/docs
-- **Demo login**: `demo@sqlpractice.com` / `demo123`
-- **Admin login**: `admin@sqlpractice.com` / `admin123`
+Set the following values in `backend/.env`:
 
----
-
-## 🔧 Environment Variables
-
-### Backend (.env)
 ```env
-DATABASE_URL=postgresql://postgres:password@localhost:5432/sql_practice
-SECRET_KEY=your-super-secret-key
+DATABASE_URL=postgresql://postgres.<project-ref>:<url-encoded-password>@<pooler-host>:6543/postgres?sslmode=require
+SECRET_KEY=replace-with-a-long-random-secret
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
 CORS_ORIGINS=http://localhost:3000
 SANDBOX_DB_DIR=./sandbox_dbs
 ```
 
-### Frontend (.env.local)
+Never commit `.env` or database credentials. The repository ignores local
+environment files, virtual environments, databases, and build output.
+
+### 3. Prepare the database
+
+Create the tables on the configured PostgreSQL database:
+
+```powershell
+.\venv\Scripts\python.exe scripts\create_supabase_tables.py
+```
+
+To load the bundled dataset and seed data:
+
+```powershell
+.\venv\Scripts\python.exe -m app.database.seed
+```
+
+### 4. Start the backend
+
+From `backend/`:
+
+```powershell
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000
+```
+
+The backend is available at `http://localhost:8000`.
+
+### 5. Configure and start the frontend
+
+Open a second terminal:
+
+```powershell
+cd frontend
+npm install
+```
+
+Create `frontend/.env.local`:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
 ```
 
----
+Start Next.js:
 
-## 🌐 Deployment
+```powershell
+npm run dev
+```
 
-### Frontend (Vercel)
-1. Push to GitHub
-2. Import project in Vercel
-3. Set root directory to `frontend`
-4. Add `NEXT_PUBLIC_API_URL` environment variable
-5. Deploy
+The application is available at `http://localhost:3000`.
 
-### Backend (Render)
-1. Create a new Web Service on Render
-2. Set root directory to `backend`
-3. Build Command: `pip install -r requirements.txt`
-4. Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Add environment variables
-6. Deploy
+## Frontend scripts
 
-### Database (Supabase)
-1. Create a new project on Supabase
-2. Copy the PostgreSQL connection string
-3. Set `DATABASE_URL` in your backend environment
+Run these commands from `frontend/`:
 
----
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Run ESLint |
 
-## 📚 API Documentation
+## API documentation
 
-When the backend is running, visit:
-- **Swagger UI**: http://localhost:8000/api/docs
-- **ReDoc**: http://localhost:8000/api/redoc
+With the backend running:
 
-### Key Endpoints
+- Swagger UI: `http://localhost:8000/api/docs`
+- ReDoc: `http://localhost:8000/api/redoc`
+- Health check: `http://localhost:8000/api/health`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Create account |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/me` | Get current user |
-| GET | `/api/questions` | List questions |
-| GET | `/api/questions/{id}` | Get question detail |
-| POST | `/api/sql/execute` | Run SQL query |
-| POST | `/api/sql/submit` | Submit for grading |
-| GET | `/api/dashboard` | User dashboard stats |
-| GET | `/api/leaderboard` | Global rankings |
-| GET | `/api/categories` | List categories |
-| POST | `/api/bookmarks` | Toggle bookmark |
+Important API areas include:
 
----
+- `/api/auth` — signup, login, and current-user information
+- `/api/questions` — question listing, details, and administration
+- `/api/sql` — query execution and submissions
+- `/api/dashboard` — progress and activity data
+- `/api/categories` — SQL categories
+- `/api/companies` — company filters
+- `/api/leaderboard` — rankings
+- `/api/bookmarks` — saved questions
+- `/api/reports` — question reports
 
-## 🔒 Security
+## Deployment
 
-- **JWT Authentication** with bcrypt password hashing
-- **SQL Validation** — Only SELECT/WITH queries allowed
-- **Read-only SQLite** — Sandbox databases opened in read-only mode
-- **Rate Limiting** — API rate limiting via SlowAPI
-- **Input Sanitization** — Pydantic validation on all inputs
-- **CORS** — Configurable allowed origins
+### Frontend on Vercel
 
----
+1. Import the GitHub repository into Vercel.
+2. Set the project root directory to `frontend`.
+3. Set `NEXT_PUBLIC_API_URL` to the deployed backend API URL, including `/api`.
+4. Deploy the project.
 
-## 📝 License
+### Backend on Render or another Python host
 
-MIT License — feel free to use this project for learning and development.
+1. Create a Python web service using the `backend` directory as its root.
+2. Build command:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Start command:
+
+   ```bash
+   uvicorn app.main:app --host 0.0.0.0 --port $PORT
+   ```
+
+4. Configure `DATABASE_URL`, `SECRET_KEY`, `ALGORITHM`,
+   `ACCESS_TOKEN_EXPIRE_MINUTES`, `CORS_ORIGINS`, and `SANDBOX_DB_DIR`.
+5. Add the deployed frontend origin to `CORS_ORIGINS`.
+
+### Supabase
+
+Use the PostgreSQL connection string from Supabase as `DATABASE_URL`. For
+pooler connections, use the port and host supplied by the Supabase dashboard
+and URL-encode special characters in the password.
+
+## Security notes
+
+- Use a unique, long `SECRET_KEY` in every deployed environment.
+- Store credentials only in deployment-provider secrets or local ignored files.
+- Restrict `CORS_ORIGINS` to known frontend origins.
+- Do not expose the PostgreSQL connection string to the browser.
+- The SQL sandbox is separate from the primary PostgreSQL persistence database.
+
+## License
+
+This project is available under the MIT License.
