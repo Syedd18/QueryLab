@@ -197,10 +197,11 @@ Important API areas include:
 ### Backend on Render or another Python host
 
 1. Create a Python web service using the `backend` directory as its root.
-2. Build command:
+2. Set the build command to install dependencies and generate the SQLite
+   sandbox databases:
 
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements.txt && python scripts/prepare_sandboxes.py
    ```
 
 3. Start command:
@@ -212,6 +213,26 @@ Important API areas include:
 4. Configure `DATABASE_URL`, `SECRET_KEY`, `ALGORITHM`,
    `ACCESS_TOKEN_EXPIRE_MINUTES`, `CORS_ORIGINS`, and `SANDBOX_DB_DIR`.
 5. Add the deployed frontend origin to `CORS_ORIGINS`.
+
+The sandbox-preparation command creates `practice.db`, `practice_v2.db`, and
+`practice_tech.db` inside `SANDBOX_DB_DIR` and validates the company question
+queries against the generated databases. The files are intentionally excluded
+from Git and are generated as part of the backend build, so they are present in
+the deployed app without relying on a persistent disk. Keep the same
+`SANDBOX_DB_DIR` value for the build and runtime.
+
+Before the first deployment, initialize the PostgreSQL database and load the
+question records once from the backend directory:
+
+```bash
+python -m app.database.seed
+python scripts/build_company_bank.py --apply
+```
+
+These are database-writing setup commands, not build commands. Run them
+deliberately against the intended database: the company-bank script updates
+question records and hides surplus existing questions. The deployment build
+only creates and validates local SQLite files; it does not write to PostgreSQL.
 
 ### Supabase
 
