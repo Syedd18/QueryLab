@@ -37,7 +37,7 @@ export function ProfileModalProvider({ children }: { children: React.ReactNode }
 
 const AVATAR_STYLES = ["thumbs", "bottts", "identicon", "shapes", "glass", "fun-emoji"];
 const dicebear = (style: string, seed: string) =>
-  `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(seed || "QueryLab")}`;
+  `https://api.dicebear.com/9.x/${style}/svg?seed=${encodeURIComponent(seed || "qryntiq")}`;
 
 function ProfileDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user, isAuthenticated, logout, refreshUser } = useAuth();

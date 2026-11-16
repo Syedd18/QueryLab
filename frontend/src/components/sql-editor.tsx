@@ -13,10 +13,10 @@ interface SQLEditorProps {
   height?: string;
 }
 
-/* Editor themes derived from the QueryLab tokens so the editor reads as part
+/* Editor themes derived from the qryntiq tokens so the editor reads as part
    of the chrome. Syntax colors reuse the link and status hues only. */
 const defineThemes: BeforeMount = (monaco) => {
-  monaco.editor.defineTheme("querylab-light", {
+  monaco.editor.defineTheme("qryntiq-light", {
     base: "vs",
     inherit: true,
     rules: [
@@ -58,7 +58,7 @@ const defineThemes: BeforeMount = (monaco) => {
     },
   });
 
-  monaco.editor.defineTheme("querylab-dark", {
+  monaco.editor.defineTheme("qryntiq-dark", {
     base: "vs-dark",
     inherit: true,
     rules: [
@@ -152,7 +152,7 @@ export function SQLEditor({
     <Editor
       height={height}
       language="sql"
-      theme={resolvedTheme === "dark" ? "querylab-dark" : "querylab-light"}
+      theme={resolvedTheme === "dark" ? "qryntiq-dark" : "qryntiq-light"}
       value={value}
       onChange={(v) => onChange(v || "")}
       beforeMount={defineThemes}

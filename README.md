@@ -1,17 +1,17 @@
 <p align="center">
-  <img src="./assets/querylab-wordmark.svg" alt="QueryLab logo" width="420" />
+  <img src="./assets/qryntiq-wordmark.svg" alt="qryntiq logo" width="420" />
 </p>
 
-# QueryLab
+# qryntiq
 
-QueryLab is a full-stack SQL practice platform built for learning, mastering, and
+qryntiq is a full-stack SQL practice platform built for learning, mastering, and
 applying SQL through realistic industry-inspired exercises. The application
 combines a modern Next.js frontend, a FastAPI backend, Supabase PostgreSQL data
 storage, and isolated SQLite execution sandboxes for safe query evaluation.
 
 ## Overview
 
-QueryLab helps developers and data enthusiasts practice SQL with structured
+qryntiq helps developers and data enthusiasts practice SQL with structured
 categories, company-based scenarios, guided challenges, and dashboard tracking.
 Users can solve questions, run queries against sandbox databases, review results,
 track progress, and benchmark their performance over time.
@@ -42,7 +42,7 @@ track progress, and benchmark their performance over time.
 ## Repository layout
 
 ```text
-QueryLab/
+qryntiq/
 ├── backend/
 │   ├── app/
 │   │   ├── database/       # Database session and seed logic
@@ -72,8 +72,8 @@ QueryLab/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Syedd18/QueryLab.git
-cd QueryLab
+git clone https://github.com/Syedd18/qryntiq.git
+cd qryntiq
 ```
 
 ### 2. Configure the backend

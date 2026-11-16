@@ -1,5 +1,5 @@
 """
-Rebuild the QueryLab practice content on a clean, self-contained schema.
+Rebuild the qryntiq practice content on a clean, self-contained schema.
 
 What it does:
   1. Builds a fresh SQLite sandbox at sandbox_dbs/practice_v2.db (6 related

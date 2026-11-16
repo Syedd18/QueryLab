@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { fadeUp, normal } from "@/lib/motion";
 
 /* The brand panel is intentionally dark in both app themes (it mirrors the
-   QueryLab identity frames). Literal hexes from the dark collection keep it
+   qryntiq identity frames). Literal hexes from the dark collection keep it
    constant regardless of the active theme. */
 const D = {
   bg: "#121416",
@@ -157,7 +157,7 @@ function BrandPanel() {
         <div className="flex items-center gap-2.5">
           <LogoMark style={{ color: D.accent }} />
           <span className="text-md font-semibold tracking-tight" style={{ color: D.white }}>
-            QueryLab
+            qryntiq
           </span>
         </div>
         <span
@@ -227,7 +227,7 @@ export function AuthShell({
         />
 
         <header className="relative z-10 flex h-16 shrink-0 items-center justify-between px-6 lg:hidden">
-          <Link href="/" className="rounded-md" aria-label="QueryLab home">
+          <Link href="/" className="rounded-md" aria-label="qryntiq home">
             <Logo />
           </Link>
         </header>

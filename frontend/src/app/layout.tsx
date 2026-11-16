@@ -4,8 +4,8 @@ import { Providers } from "@/components/providers";
 
 export const metadata: Metadata = {
   title: {
-    default: "QueryLab",
-    template: "%s · QueryLab",
+    default: "qryntiq",
+    template: "%s · qryntiq",
   },
   description:
     "A dedicated environment for deliberate SQL practice, real-world problems, and interview preparation.",

@@ -1,4 +1,4 @@
--- QueryLab schema for Supabase / PostgreSQL
+-- qryntiq schema for Supabase / PostgreSQL
 -- Generated from the app's SQLAlchemy models. Idempotent: safe to run on an
 -- empty database and safe to re-run (existing objects and data are left alone).
 -- Paste into: Supabase dashboard -> SQL Editor -> New query -> Run.

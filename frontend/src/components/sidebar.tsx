@@ -140,7 +140,7 @@ export function Sidebar() {
           isCollapsed && "justify-center px-0"
         )}
       >
-        <Link href="/dashboard" className="rounded-md" aria-label="QueryLab home">
+        <Link href="/dashboard" className="rounded-md" aria-label="qryntiq home">
           <Logo compact={isCollapsed} className="dark:[&_svg]:text-[#7893AD]" />
         </Link>
         {!isCollapsed && (

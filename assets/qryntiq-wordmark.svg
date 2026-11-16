@@ -1,0 +1,25 @@
+<svg width="540" height="150" viewBox="0 0 540 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="540" height="150" rx="22" fill="#0C0F13"/>
+  <g transform="translate(30 33)">
+    <defs>
+      <linearGradient id="cyl" x1="6" y1="5" x2="30" y2="34" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#CBDAEA"/>
+        <stop offset="1" stop-color="#7C9AB8"/>
+      </linearGradient>
+      <linearGradient id="leg" x1="20" y1="18" x2="33" y2="34" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#93B3D2"/>
+        <stop offset="1" stop-color="#5E82A6"/>
+      </linearGradient>
+    </defs>
+    <g transform="scale(2.1)">
+      <path fill="url(#cyl)" d="M6 10.5C6 7.46 11.37 5 18 5s12 2.46 12 5.5v13c0 3.04-5.37 5.5-12 5.5S6 26.54 6 23.5v-13Z"/>
+      <ellipse cx="18" cy="10.5" rx="12" ry="5.5" fill="#D6E2EF"/>
+      <path stroke="#5C7E9E" stroke-width="2.1" stroke-linecap="round" d="M6 16.5c0 3.04 5.37 5.5 12 5.5s12-2.46 12-5.5"/>
+      <path stroke="#5C7E9E" stroke-width="2.1" stroke-linecap="round" d="M6 22.5c0 3.04 5.37 5.5 12 5.5s12-2.46 12-5.5"/>
+      <path stroke="url(#leg)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" d="M21.5 18.5 31.5 32.5"/>
+    </g>
+  </g>
+  <text x="138" y="86" fill="#F0F1F2" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="56" font-weight="600" letter-spacing="-0.02em">qryntiq</text>
+  <circle cx="246" cy="36" r="6.5" fill="#7893AD"/>
+  <text x="139" y="115" fill="#A0A5AA" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="0.16em">SQL PRACTICE STUDIO</text>
+</svg>

@@ -1,5 +1,5 @@
 """
-Create the QueryLab tables on the configured database (Supabase Postgres).
+Create the qryntiq tables on the configured database (Supabase Postgres).
 
 This uses the app's own SQLAlchemy models, so the schema matches the running
 app exactly. It reads DATABASE_URL from backend/.env (see app/config.py), so

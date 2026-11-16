@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ──────────────────────────────────────────────────────────────────────────
-   QueryLab design tokens
-   Values follow the QueryLab Figma system (dark + light collections).
+   qryntiq design tokens
+   Values follow the qryntiq Figma system (dark + light collections).
    Raw values live on :root / .dark; Tailwind utilities are generated from the
    semantic aliases in @theme, so the whole UI reads from one place.
    ────────────────────────────────────────────────────────────────────────── */
