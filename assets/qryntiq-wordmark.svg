@@ -1,25 +1,23 @@
-<svg width="540" height="150" viewBox="0 0 540 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="540" height="150" rx="22" fill="#0C0F13"/>
-  <g transform="translate(30 33)">
-    <defs>
-      <linearGradient id="cyl" x1="6" y1="5" x2="30" y2="34" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#CBDAEA"/>
-        <stop offset="1" stop-color="#7C9AB8"/>
-      </linearGradient>
-      <linearGradient id="leg" x1="20" y1="18" x2="33" y2="34" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#93B3D2"/>
-        <stop offset="1" stop-color="#5E82A6"/>
-      </linearGradient>
-    </defs>
-    <g transform="scale(2.1)">
-      <path fill="url(#cyl)" d="M6 10.5C6 7.46 11.37 5 18 5s12 2.46 12 5.5v13c0 3.04-5.37 5.5-12 5.5S6 26.54 6 23.5v-13Z"/>
-      <ellipse cx="18" cy="10.5" rx="12" ry="5.5" fill="#D6E2EF"/>
-      <path stroke="#5C7E9E" stroke-width="2.1" stroke-linecap="round" d="M6 16.5c0 3.04 5.37 5.5 12 5.5s12-2.46 12-5.5"/>
-      <path stroke="#5C7E9E" stroke-width="2.1" stroke-linecap="round" d="M6 22.5c0 3.04 5.37 5.5 12 5.5s12-2.46 12-5.5"/>
-      <path stroke="url(#leg)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" d="M21.5 18.5 31.5 32.5"/>
-    </g>
-  </g>
-  <text x="138" y="86" fill="#F0F1F2" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="56" font-weight="600" letter-spacing="-0.02em">qryntiq</text>
-  <circle cx="246" cy="36" r="6.5" fill="#7893AD"/>
-  <text x="139" y="115" fill="#A0A5AA" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="0.16em">SQL PRACTICE STUDIO</text>
+<svg width="560" height="150" viewBox="0 0 560 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tile" x1="75" y1="33" x2="75" y2="117" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#222A31"/>
+      <stop offset="1" stop-color="#0F141A"/>
+    </linearGradient>
+    <linearGradient id="glyph" x1="46" y1="52" x2="104" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EEF3F8"/>
+      <stop offset="1" stop-color="#A6BDD5"/>
+    </linearGradient>
+  </defs>
+  <rect width="560" height="150" rx="22" fill="#0C0F13"/>
+  <!-- mark -->
+  <rect x="33" y="33" width="84" height="84" rx="24" fill="url(#tile)"/>
+  <rect x="34" y="34" width="82" height="82" rx="23" fill="none" stroke="#333D47" stroke-width="1.4"/>
+  <circle cx="69" cy="73" r="15.5" fill="none" stroke="url(#glyph)" stroke-width="7.3"/>
+  <path d="M84.5 62.5V101" stroke="url(#glyph)" stroke-width="7.3" stroke-linecap="round"/>
+  <circle cx="84.5" cy="60" r="4.8" fill="#7E9CBD"/>
+  <!-- wordmark -->
+  <text x="150" y="86" fill="#F0F1F2" font-family="Space Grotesk, Segoe UI, Inter, Arial, sans-serif" font-size="54" font-weight="600" letter-spacing="-0.015em">qryntiq</text>
+  <circle cx="257" cy="43" r="6" fill="#7893AD"/>
+  <text x="151" y="114" fill="#9BA1A8" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="15" font-weight="500" letter-spacing="0.18em">SQL PRACTICE STUDIO</text>
 </svg>

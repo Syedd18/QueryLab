@@ -1,7 +1,10 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-/** The qryntiq mark: a database cylinder fused with an R-style query tail. */
+/**
+ * The qryntiq mark: a monogram "q" drawn as a query loop (ring + stem) encircling
+ * a single steel-blue data node, set in a premium graphite app-icon tile.
+ */
 export function LogoMark({
   className,
   ...props
@@ -16,44 +19,31 @@ export function LogoMark({
       {...props}
     >
       <defs>
-        <linearGradient id={`${gid}-cyl`} x1="6" y1="5" x2="30" y2="34" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#CBDAEA" />
-          <stop offset="1" stopColor="#7C9AB8" />
+        <linearGradient id={`${gid}-tile`} x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#222A31" />
+          <stop offset="1" stopColor="#0F141A" />
         </linearGradient>
-        <linearGradient id={`${gid}-leg`} x1="20" y1="18" x2="33" y2="34" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#93B3D2" />
-          <stop offset="1" stopColor="#5E82A6" />
+        <linearGradient id={`${gid}-glyph`} x1="11" y1="9" x2="29" y2="31" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#EEF3F8" />
+          <stop offset="1" stopColor="#A6BDD5" />
         </linearGradient>
       </defs>
-      {/* cylinder body */}
+      {/* app-icon tile */}
+      <rect x="1" y="1" width="38" height="38" rx="11" fill={`url(#${gid}-tile)`} />
+      <rect x="1.5" y="1.5" width="37" height="37" rx="10.5" fill="none" stroke="#333D47" strokeWidth="1" />
+      {/* faint top highlight for depth */}
+      <path d="M12 2.5h16" stroke="#56626D" strokeWidth="1" strokeLinecap="round" opacity="0.55" />
+      {/* q bowl — the query loop */}
+      <circle cx="17.2" cy="18" r="6.9" fill="none" stroke={`url(#${gid}-glyph)`} strokeWidth="3.3" />
+      {/* q stem / descender, right-tangent to the bowl */}
       <path
-        fill={`url(#${gid}-cyl)`}
-        d="M6 10.5C6 7.46 11.37 5 18 5s12 2.46 12 5.5v13c0 3.04-5.37 5.5-12 5.5S6 26.54 6 23.5v-13Z"
-      />
-      {/* top disk + rim highlight */}
-      <ellipse cx="18" cy="10.5" rx="12" ry="5.5" fill="#D6E2EF" />
-      <ellipse cx="18" cy="10" rx="9" ry="3.6" fill="none" stroke="#EAF1F7" strokeWidth="1.1" opacity="0.7" />
-      {/* band separators */}
-      <path
-        stroke="#5C7E9E"
-        strokeWidth="2.1"
+        d="M24.1 12.4V29.6"
+        stroke={`url(#${gid}-glyph)`}
+        strokeWidth="3.3"
         strokeLinecap="round"
-        d="M6 16.5c0 3.04 5.37 5.5 12 5.5s12-2.46 12-5.5"
       />
-      <path
-        stroke="#5C7E9E"
-        strokeWidth="2.1"
-        strokeLinecap="round"
-        d="M6 22.5c0 3.04 5.37 5.5 12 5.5s12-2.46 12-5.5"
-      />
-      {/* R leg / query tail */}
-      <path
-        stroke={`url(#${gid}-leg)`}
-        strokeWidth="4.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21.5 18.5 31.5 32.5"
-      />
+      {/* steel node capping the stem — echoes the wordmark dot */}
+      <circle cx="24.1" cy="11.7" r="2.15" fill="#7E9CBD" />
     </svg>
   );
 }
