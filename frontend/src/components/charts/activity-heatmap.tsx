@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface Day {
@@ -8,13 +8,14 @@ interface Day {
   count: number;
 }
 
-// GitHub's contribution palette (light + dark).
+// Brand steel ramp: one hue at rising intensity, so the calendar reads as
+// part of the product in both themes rather than a borrowed GitHub widget.
 const LEVEL_CLASS = [
-  "bg-[#ebedf0] dark:bg-[#161b22]",
-  "bg-[#9be9a8] dark:bg-[#0e4429]",
-  "bg-[#40c463] dark:bg-[#006d32]",
-  "bg-[#30a14e] dark:bg-[#26a641]",
-  "bg-[#216e39] dark:bg-[#39d353]",
+  "bg-surface-3",
+  "bg-accent-text/25",
+  "bg-accent-text/45",
+  "bg-accent-text/70",
+  "bg-accent-text",
 ];
 
 function level(count: number): number {
@@ -40,6 +41,13 @@ const WEEKDAYS = ["", "Mon", "", "Wed", "", "Fri", ""]; // label a few rows only
  */
 export function ActivityHeatmap({ data, className }: { data: Day[]; className?: string }) {
   const [hover, setHover] = useState<{ day: Day; x: number; y: number } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // On narrow screens the calendar scrolls; open on the most recent weeks.
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, [data]);
 
   const { weeks, monthLabels, total } = useMemo(() => {
     const days = [...data].sort((a, b) => a.date.localeCompare(b.date));
@@ -74,7 +82,7 @@ export function ActivityHeatmap({ data, className }: { data: Day[]; className?: 
 
   return (
     <div data-heatmap className={cn("relative", className)}>
-      <div className="overflow-x-auto pb-1">
+      <div ref={scrollRef} className="overflow-x-auto pb-1">
         <div className="inline-flex flex-col gap-1.5">
           {/* Month labels */}
           <div className="flex pl-8 text-xs text-fg-subtle">
@@ -118,7 +126,7 @@ export function ActivityHeatmap({ data, className }: { data: Day[]; className?: 
                         onFocus={() => setHover({ day: cell, x: 0, y: 0 })}
                         onBlur={() => setHover(null)}
                         className={cn(
-                          "size-3 rounded-[2px] outline-none ring-offset-1 ring-offset-surface focus-visible:ring-2 focus-visible:ring-accent",
+                          "size-3 rounded-[3px] outline-none ring-offset-1 ring-offset-surface transition-transform duration-150 hover:scale-125 focus-visible:ring-2 focus-visible:ring-accent-text",
                           LEVEL_CLASS[level(cell.count)]
                         )}
                       />
@@ -139,7 +147,7 @@ export function ActivityHeatmap({ data, className }: { data: Day[]; className?: 
         <div className="flex items-center gap-1.5">
           <span>Less</span>
           {LEVEL_CLASS.map((c, i) => (
-            <span key={i} className={cn("size-3 rounded-[2px]", c)} aria-hidden />
+            <span key={i} className={cn("size-3 rounded-[3px]", c)} aria-hidden />
           ))}
           <span>More</span>
         </div>
@@ -149,11 +157,11 @@ export function ActivityHeatmap({ data, className }: { data: Day[]; className?: 
       {hover && hover.x > 0 && (
         <div
           role="tooltip"
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-md border border-line bg-surface px-2 py-1 text-xs shadow-overlay"
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-md bg-fg px-2 py-1 text-xs text-canvas shadow-raised"
           style={{ left: hover.x, top: hover.y - 6 }}
         >
-          <span className="font-medium text-fg tabular-nums">{hover.day.count}</span>
-          <span className="text-fg-subtle">
+          <span className="font-semibold tabular-nums">{hover.day.count}</span>
+          <span className="opacity-70">
             {" "}
             {hover.day.count === 1 ? "submission" : "submissions"} · {hover.day.date}
           </span>

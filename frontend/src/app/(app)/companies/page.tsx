@@ -42,6 +42,7 @@ export default function CompaniesPage() {
   return (
     <Page width="wide">
       <PageHeader
+        eyebrow="Workspace · Interview sets"
         title="Companies"
         description="Practice by where problems are asked. Pick a company to drill its interview set."
       />
@@ -50,7 +51,7 @@ export default function CompaniesPage() {
         <div className="grid grid-cols-1 gap-px bg-line sm:grid-cols-3">
           {summary.map((s) => (
             <div key={s.label} className="bg-surface px-5 py-4">
-              <p className="text-xs text-fg-subtle">{s.label}</p>
+              <p className="eyebrow">{s.label}</p>
               {isLoading ? (
                 <Skeleton className="mt-1.5 h-6 w-24" />
               ) : (
@@ -119,7 +120,7 @@ function CompanyCard({
     <button
       type="button"
       onClick={onOpen}
-      className="group flex items-center gap-3 rounded-lg border border-line bg-surface p-4 text-left transition-colors hover:border-line-strong hover:bg-surface-2"
+      className="group flex items-center gap-3 rounded-lg border border-line bg-surface p-4 text-left shadow-[var(--highlight),var(--shadow-card)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-[var(--highlight),var(--shadow-raised)]"
       aria-label={`${company.name}, ${company.question_count} problems`}
     >
       <CompanyLogo name={company.name} size="lg" className="transition-colors group-hover:border-line-strong" />

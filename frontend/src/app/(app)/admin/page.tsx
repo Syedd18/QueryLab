@@ -138,6 +138,7 @@ export default function AdminPage() {
   return (
     <Page width="wide">
       <PageHeader
+        eyebrow="Administration"
         title="Admin"
         description="Manage the problem library and review reported issues."
         actions={

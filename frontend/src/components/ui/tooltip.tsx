@@ -28,9 +28,11 @@ export function Tooltip({
         role="tooltip"
         id={id}
         className={cn(
-          "pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 whitespace-nowrap rounded-md border border-line bg-surface px-2 py-1 text-xs text-fg shadow-overlay",
-          "opacity-0 transition-opacity delay-150 group-hover/tt:opacity-100 group-focus-within/tt:opacity-100",
-          side === "bottom" ? "top-full mt-1.5" : "bottom-full mb-1.5"
+          "pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 whitespace-nowrap rounded-md bg-fg px-2 py-1 text-xs font-medium text-canvas shadow-raised",
+          "opacity-0 transition-[opacity,transform] delay-150 duration-150 group-hover/tt:opacity-100 group-focus-within/tt:opacity-100",
+          side === "bottom"
+            ? "top-full mt-2 -translate-y-0.5 group-hover/tt:translate-y-0 group-focus-within/tt:translate-y-0"
+            : "bottom-full mb-2 translate-y-0.5 group-hover/tt:translate-y-0 group-focus-within/tt:translate-y-0"
         )}
       >
         {label}

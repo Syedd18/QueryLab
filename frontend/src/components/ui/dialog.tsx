@@ -4,7 +4,7 @@ import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { Button } from "./button";
-import { fade, fadeUp, quick } from "@/lib/motion";
+import { fade, pop, quick, normal } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export function Dialog({
@@ -15,6 +15,7 @@ export function Dialog({
   children,
   footer,
   className,
+  headerless = false,
 }: {
   open: boolean;
   onClose: () => void;
@@ -23,6 +24,8 @@ export function Dialog({
   children?: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
+  /** Render children edge-to-edge with a floating close button; title/description stay for screen readers. */
+  headerless?: boolean;
 }) {
   const panelRef = React.useRef<HTMLDivElement>(null);
   const titleId = React.useId();
@@ -52,44 +55,74 @@ export function Dialog({
           <motion.div
             {...fade}
             transition={quick}
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-[rgb(20_20_22/0.42)] dark:bg-[rgb(0_0_0/0.62)]"
             onClick={onClose}
             aria-hidden
           />
           <motion.div
             ref={panelRef}
-            {...fadeUp}
-            transition={quick}
+            {...pop}
+            transition={normal}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
             aria-describedby={description ? descId : undefined}
             tabIndex={-1}
             className={cn(
-              "relative w-full max-w-md rounded-lg border border-line bg-surface shadow-overlay outline-none",
+              "relative max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-xl border border-line bg-surface shadow-[var(--highlight),var(--shadow-overlay)] outline-none",
               className
             )}
           >
-            <div className="flex items-start justify-between gap-4 px-5 pt-4">
-              <div>
-                <h2 id={titleId} className="text-md font-semibold text-fg">
+            {headerless ? (
+              <>
+                <h2 id={titleId} className="sr-only">
                   {title}
                 </h2>
                 {description && (
-                  <p id={descId} className="mt-1 text-sm text-fg-subtle">
+                  <p id={descId} className="sr-only">
+                    {description}
+                  </p>
+                )}
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={onClose}
+                  aria-label="Close"
+                  className="absolute right-3 top-3 z-10 text-fg-subtle"
+                >
+                  <X />
+                </Button>
+                {children}
+                {footer && (
+                  <div className="flex justify-end gap-2 rounded-b-xl border-t border-line bg-surface-2/50 px-6 py-3.5">
+                    {footer}
+                  </div>
+                )}
+              </>
+            ) : (
+            <>
+            <div className="flex items-start justify-between gap-4 px-6 pt-5">
+              <div className="min-w-0">
+                <h2 id={titleId} className="text-lg font-semibold tracking-[-0.01em] text-fg">
+                  {title}
+                </h2>
+                {description && (
+                  <p id={descId} className="mt-1 text-sm leading-5 text-fg-muted">
                     {description}
                   </p>
                 )}
               </div>
-              <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close">
+              <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close" className="-mr-2 -mt-1">
                 <X />
               </Button>
             </div>
-            {children && <div className="px-5 py-4 text-sm">{children}</div>}
+            {children && <div className="px-6 pb-5 pt-4 text-sm">{children}</div>}
             {footer && (
-              <div className="flex justify-end gap-2 border-t border-line px-5 py-3">
+              <div className="flex justify-end gap-2 rounded-b-xl border-t border-line bg-surface-2/50 px-6 py-3.5">
                 {footer}
               </div>
+            )}
+            </>
             )}
           </motion.div>
         </div>

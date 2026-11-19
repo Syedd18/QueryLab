@@ -66,8 +66,8 @@ export default function PracticePage() {
 
 function PracticeSkeleton() {
   return (
-    <div className="flex h-[calc(100dvh-3rem)] lg:h-[calc(100dvh-4rem)]">
-      <div className="hidden w-[400px] shrink-0 border-r border-line p-4 md:block">
+    <div className="flex h-[calc(100dvh-3rem)] lg:h-[calc(100dvh-3.5rem)]">
+      <div className="hidden w-[420px] shrink-0 border-r border-line bg-surface p-4 md:block">
         <Skeleton className="h-4 w-1/2" />
         <Skeleton className="mt-4 h-8 w-full" />
         <Skeleton className="mt-3 h-3.5 w-3/4" />
@@ -303,9 +303,9 @@ function PracticeScreen() {
 
   // ── Render ──────────────────────────────────────────────────────────────
   return (
-    <div className="flex h-[calc(100dvh-3rem)] flex-col border-t border-line lg:h-[calc(100dvh-4rem)]">
+    <div className="flex h-[calc(100dvh-3rem)] flex-col lg:h-[calc(100dvh-3.5rem)]">
       {/* Mobile pane switch */}
-      <div className="flex h-10 shrink-0 items-center border-b border-line bg-surface px-3 md:hidden">
+      <div className="flex h-11 shrink-0 items-center border-b border-line bg-surface px-3 md:hidden">
         <Tabs
           variant="segmented"
           size="sm"
@@ -323,7 +323,7 @@ function PracticeScreen() {
         {/* ── Left pane: problem list / problem detail ─────────────────── */}
         <aside
           className={cn(
-            "min-h-0 shrink-0 flex-col border-r border-line bg-surface md:flex md:w-[400px]",
+            "min-h-0 shrink-0 flex-col border-r border-line bg-surface md:flex md:w-[380px] xl:w-[420px]",
             mobileView === "problem" ? "flex w-full" : "hidden"
           )}
           aria-label="Problem"
@@ -382,41 +382,37 @@ function PracticeScreen() {
             />
           ) : (
             <>
-              {/* Toolbar */}
-              <div className="flex h-11 shrink-0 items-center justify-between gap-3 border-b border-line px-3">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="secondary"
-                    size="md"
-                    onClick={handleRun}
-                    loading={executeMutation.isPending}
-                    disabled={isRunning || !sql.trim()}
-                  >
-                    {!executeMutation.isPending && <Play />}
-                    Run
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="md"
-                    onClick={handleSubmit}
-                    loading={submitMutation.isPending}
-                    disabled={isRunning || !sql.trim()}
-                  >
-                    {!submitMutation.isPending && <Send />}
-                    Submit
-                  </Button>
-                  <Button variant="ghost" size="md" onClick={handleReset} disabled={isRunning}>
-                    <RotateCcw />
-                    Reset
-                  </Button>
+              {/* Toolbar — file tab left, actions right */}
+              <div className="flex h-11 shrink-0 items-stretch justify-between gap-3 border-b border-line bg-surface pr-2">
+                <div className="flex min-w-0 items-stretch">
+                  <span className="relative flex items-center gap-2 border-r border-line bg-[var(--editor-bg)] px-4 font-mono text-xs text-fg">
+                    <span
+                      className={cn(
+                        "size-1.5 rounded-full",
+                        submitResult?.is_correct ? "bg-success" : sql.trim() ? "bg-accent-text" : "bg-line-strong"
+                      )}
+                      aria-hidden
+                    />
+                    query.sql
+                    <span className="absolute inset-x-0 -bottom-px h-px bg-[var(--editor-bg)]" aria-hidden />
+                  </span>
+                  {question && (
+                    <span className="hidden min-w-0 items-center truncate px-4 text-xs text-fg-subtle xl:flex">
+                      {question.title}
+                    </span>
+                  )}
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="hidden items-center gap-1.5 text-xs text-fg-subtle sm:flex">
+                <div className="flex items-center gap-1.5">
+                  <div className="mr-2 hidden items-center gap-1 text-xs text-fg-faint lg:flex">
                     <Kbd>Ctrl</Kbd>
-                    <span aria-hidden>+</span>
-                    <Kbd>Enter</Kbd>
-                    <span className="ml-1">to run</span>
+                    <Kbd>↵</Kbd>
+                    <span className="ml-1">run</span>
                   </div>
+                  <Tooltip label="Clear editor">
+                    <Button variant="ghost" size="icon-sm" onClick={handleReset} disabled={isRunning} aria-label="Reset">
+                      <RotateCcw />
+                    </Button>
+                  </Tooltip>
                   <Tooltip label={fullscreen ? "Exit full screen (Esc)" : "Full screen"}>
                     <Button
                       variant="ghost"
@@ -428,22 +424,43 @@ function PracticeScreen() {
                       {fullscreen ? <Minimize2 /> : <Maximize2 />}
                     </Button>
                   </Tooltip>
+                  <span className="mx-1 h-5 w-px bg-line" aria-hidden />
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleRun}
+                    loading={executeMutation.isPending}
+                    disabled={isRunning || !sql.trim()}
+                  >
+                    {!executeMutation.isPending && <Play />}
+                    Run
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleSubmit}
+                    loading={submitMutation.isPending}
+                    disabled={isRunning || !sql.trim()}
+                  >
+                    {!submitMutation.isPending && <Send />}
+                    Submit
+                  </Button>
                 </div>
               </div>
 
               {/* Editor */}
-              <div className="min-h-0 flex-1">
+              <div className="min-h-0 flex-1 bg-[var(--editor-bg)]">
                 <SQLEditor value={sql} onChange={setSql} onRun={handleRun} height="100%" />
               </div>
 
               {/* Results */}
               <div
                 className={cn(
-                  "flex shrink-0 flex-col border-t border-line",
+                  "flex shrink-0 flex-col border-t border-line bg-surface transition-[height] duration-200 ease-out",
                   resultsCollapsed ? "h-9" : "h-[42%] min-h-[180px]"
                 )}
               >
-                <div className="flex h-9 shrink-0 items-center justify-between gap-3 border-b border-line pl-1 pr-2">
+                <div className="flex h-9 shrink-0 items-center justify-between gap-3 border-b border-line pl-2 pr-2">
                   <Tabs
                     size="sm"
                     aria-label="Results"
@@ -581,8 +598,13 @@ function ProblemList({
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex h-11 shrink-0 items-center justify-between border-b border-line px-3">
-        <h2 className="text-sm font-medium text-fg">Problems</h2>
+      <div className="flex h-11 shrink-0 items-center justify-between border-b border-line px-4">
+        <h2 className="flex items-baseline gap-2">
+          <span className="eyebrow text-fg">Problems</span>
+          {total !== undefined && (
+            <span className="font-mono text-2xs text-fg-faint tabular-nums">{total.toLocaleString()}</span>
+          )}
+        </h2>
         {onBack && (
           <Button variant="ghost" size="sm" onClick={onBack}>
             Back to problem
@@ -590,7 +612,7 @@ function ProblemList({
         )}
       </div>
 
-      <div className="space-y-2 border-b border-line p-3">
+      <div className="space-y-2.5 border-b border-line bg-surface-2/40 p-3">
         <Input
           type="search"
           placeholder="Search problems"
@@ -706,8 +728,9 @@ function ProblemList({
                     role="button"
                     aria-current={selected ? "true" : undefined}
                     className={cn(
-                      "cursor-pointer border-b border-line transition-colors last:border-b-0 hover:bg-surface-2",
-                      selected && "bg-accent-subtle hover:bg-accent-subtle"
+                      "group cursor-pointer border-b border-line transition-colors duration-150 last:border-b-0 hover:bg-surface-2/70",
+                      selected &&
+                        "bg-accent-subtle shadow-[inset_2px_0_0_var(--accent-text)] hover:bg-accent-subtle"
                     )}
                   >
                     <td className="px-2 py-2.5 text-center">
@@ -719,7 +742,7 @@ function ProblemList({
                     </td>
                     <td className="max-w-0 px-3 py-2.5">
                       <p className="truncate text-sm font-medium text-fg">{q.title}</p>
-                      <p className="truncate text-2xs text-fg-subtle">{q.category_name}</p>
+                      <p className="mt-0.5 truncate font-mono text-2xs text-fg-faint">{q.category_name}</p>
                     </td>
                     <td className="px-2 py-2.5">
                       <DifficultyBadge difficulty={q.difficulty} />
@@ -837,7 +860,7 @@ function ProblemDetail({
         />
       )}
 
-      <Tabs size="sm" aria-label="Problem sections" value={tab} onChange={onTab} items={tabs} className="px-2" />
+      <Tabs size="sm" aria-label="Problem sections" value={tab} onChange={onTab} items={tabs} className="px-3" />
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {loading || !question ? (
@@ -848,7 +871,10 @@ function ProblemDetail({
             <Skeleton className="h-3.5 w-3/4" />
           </div>
         ) : tab === "description" ? (
-          <div className="space-y-4 p-4">
+          <div className="space-y-4 px-5 py-5">
+            <h1 className="font-display text-[1.75rem] leading-[2rem] tracking-[-0.01em] text-fg">
+              {question.title}
+            </h1>
             <div className="flex flex-wrap items-center gap-1.5">
               <DifficultyBadge difficulty={question.difficulty} />
               {question.category_name && <Badge tone="neutral">{question.category_name}</Badge>}
@@ -861,8 +887,8 @@ function ProblemDetail({
             </div>
             <FormattedDescription text={question.description} />
             {question.companies && (
-              <div className="space-y-1.5 border-t border-line pt-3">
-                <p className="text-xs font-medium text-fg-subtle">Asked at</p>
+              <div className="space-y-2 border-t border-line pt-4">
+                <p className="eyebrow">Asked at</p>
                 <div className="flex flex-wrap gap-1.5">
                   {question.companies
                     .split(",")
@@ -962,7 +988,7 @@ function FormattedDescription({ text }: { text: string }) {
   const flush = (key: string) => {
     if (bullets.length) {
       blocks.push(
-        <ul key={key} className="list-disc space-y-1 pl-5 text-sm leading-6 text-fg-muted">
+        <ul key={key} className="list-disc space-y-1 pl-5 text-sm leading-6 text-fg-muted marker:text-fg-faint">
           {bullets.map((b, i) => (
             <li key={i}>{b}</li>
           ))}
@@ -980,7 +1006,7 @@ function FormattedDescription({ text }: { text: string }) {
     if (DESC_HEADINGS.has(t)) {
       flush(`u${i}`);
       blocks.push(
-        <p key={`h${i}`} className="text-2xs font-semibold uppercase tracking-[0.08em] text-fg-subtle">
+        <p key={`h${i}`} className="eyebrow pt-2 first:pt-0">
           {t}
         </p>
       );

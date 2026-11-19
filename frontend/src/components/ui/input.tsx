@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const controlBase =
-  "w-full rounded-md border border-line bg-surface text-sm text-fg placeholder:text-fg-subtle transition-colors disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:text-danger dark:bg-surface";
+  "w-full rounded-md border border-line bg-surface text-sm text-fg shadow-xs placeholder:text-fg-faint transition-[border-color,box-shadow,background-color] duration-150 hover:border-line-strong disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger aria-invalid:text-danger dark:bg-surface-2/60";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   leadingIcon?: React.ReactNode;
@@ -16,7 +16,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     if (leadingIcon) {
       return (
         <div className="relative">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-fg-subtle [&_svg]:size-4">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-fg-faint [&_svg]:size-4">
             {leadingIcon}
           </span>
           <input ref={ref} className={cn(controlBase, "h-9 pl-9 pr-3", className)} {...props} />

@@ -92,7 +92,7 @@ export function ResultTable({
   return (
     <div className={cn("flex h-full min-h-0 flex-col", className)}>
       <div className="flex h-9 shrink-0 items-center justify-between gap-3 border-b border-line px-3 text-xs text-fg-subtle">
-        <span className="tabular-nums">
+        <span className="font-mono text-2xs tabular-nums">
           {rows.length.toLocaleString()} {rows.length === 1 ? "row" : "rows"}
           {executionTime !== undefined && <> · {executionTime.toFixed(1)} ms</>}
         </span>
@@ -115,7 +115,7 @@ export function ResultTable({
                   sortable
                   sorted={sortedFor(String(i))}
                   onSort={() => toggle(String(i))}
-                  className="h-8 font-mono font-medium normal-case"
+                  className="h-8 px-3 text-xs font-medium normal-case tracking-normal text-fg-muted"
                 >
                   {col}
                 </TableHeaderCell>
@@ -124,7 +124,7 @@ export function ResultTable({
           </thead>
           <tbody className="font-mono">
             {pageRows.map((row, rowIdx) => (
-              <tr key={rowIdx} className="hover:bg-surface-2">
+              <tr key={rowIdx} className="transition-colors duration-100 hover:bg-accent-subtle/60">
                 <td className="border-b border-r border-line px-2 py-1.5 text-right text-fg-faint tabular-nums">
                   {(page - 1) * PAGE_SIZE + rowIdx + 1}
                 </td>

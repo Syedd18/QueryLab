@@ -3,14 +3,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 /* Semantic status block: soft fill, titled, explicit. */
-const calloutVariants = cva("rounded-md px-4 py-3 text-sm", {
+const calloutVariants = cva("rounded-md border px-4 py-3 text-sm", {
   variants: {
     tone: {
-      success: "bg-success-bg [&_[data-title]]:text-success",
-      warning: "bg-warning-bg [&_[data-title]]:text-warning",
-      danger: "bg-danger-bg [&_[data-title]]:text-danger",
-      info: "bg-accent-subtle [&_[data-title]]:text-accent-text",
-      neutral: "bg-surface-2 [&_[data-title]]:text-fg",
+      success: "border-success-line bg-success-bg [&_[data-title]]:text-success",
+      warning: "border-warning-line bg-warning-bg [&_[data-title]]:text-warning",
+      danger: "border-danger-line bg-danger-bg [&_[data-title]]:text-danger",
+      info: "border-accent-line bg-accent-subtle [&_[data-title]]:text-accent-text",
+      neutral: "border-line bg-surface-2 [&_[data-title]]:text-fg",
     },
   },
   defaultVariants: { tone: "neutral" },

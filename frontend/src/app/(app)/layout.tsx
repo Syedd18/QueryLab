@@ -49,21 +49,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar />
       <main className="flex min-w-0 flex-1 flex-col pt-12 lg:pt-0">
         {/* Top bar: breadcrumb · search · notifications · account */}
-        <header className="hidden h-14 shrink-0 items-center gap-6 px-8 lg:flex">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm">
-            <span className="text-fg-subtle">Workspace</span>
-            <span className="text-fg-faint" aria-hidden>
-              /
-            </span>
-            <span className="font-medium text-fg" aria-current="page">
+        <header className="sticky top-0 z-30 hidden h-14 shrink-0 items-center gap-6 border-b border-line bg-canvas/85 px-6 backdrop-blur-md lg:flex xl:px-10">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2.5">
+            <span className="eyebrow text-fg-faint">Workspace</span>
+            <span className="h-3.5 w-px rotate-[18deg] bg-line-strong" aria-hidden />
+            <span className="text-sm font-medium text-fg" aria-current="page">
               {section}
             </span>
           </nav>
 
-          <div className="ml-auto flex items-center gap-4">
-            <form onSubmit={submitSearch} role="search" className="relative">
+          <div className="ml-auto flex items-center gap-2">
+            <form onSubmit={submitSearch} role="search" className="group relative mr-2">
               <Search
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-subtle"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-faint transition-colors group-focus-within:text-fg-muted"
                 strokeWidth={1.75}
                 aria-hidden
               />
@@ -72,9 +70,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search anything..."
+                placeholder="Search problems…"
                 aria-label="Search problems"
-                className="h-9 w-[300px] rounded-md border border-line bg-surface pl-9 pr-14 text-sm text-fg placeholder:text-fg-subtle transition-colors [&::-webkit-search-cancel-button]:hidden"
+                className="h-9 w-[280px] rounded-md border border-line bg-surface pl-9 pr-16 text-sm text-fg shadow-xs placeholder:text-fg-faint transition-[width,border-color,box-shadow] duration-200 hover:border-line-strong focus:w-[340px] [&::-webkit-search-cancel-button]:hidden"
               />
               <span className="pointer-events-none absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-0.5">
                 <Kbd>{isMac ? "⌘" : "Ctrl"}</Kbd>
@@ -108,11 +106,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </Tooltip>
               </>
             ) : (
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="md" onClick={() => openAuth({ mode: "login" })}>
+              <div className="ml-1 flex items-center gap-1.5">
+                <Button variant="ghost" size="sm" onClick={() => openAuth({ mode: "login" })}>
                   Sign in
                 </Button>
-                <Button variant="primary" size="md" onClick={() => openAuth({ mode: "signup" })}>
+                <Button variant="primary" size="sm" onClick={() => openAuth({ mode: "signup" })}>
                   Create account
                 </Button>
               </div>

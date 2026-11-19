@@ -1,11 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, XCircle, Code2, Activity, BarChart3, Trophy } from "lucide-react";
+import { CheckCircle2, XCircle, Code2, Activity, BarChart3, Trophy, ArrowRight } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useAuthModal } from "@/components/auth-modal";
 import { dashboardApi, categoriesApi } from "@/lib/api";
-import { StatCard } from "@/components/stat-card";
 import { DifficultyBadge } from "@/components/difficulty-badge";
 import { ActivityHeatmap } from "@/components/charts/activity-heatmap";
 import { Page, PageHeader } from "@/components/ui/page";
@@ -48,11 +47,45 @@ function MemberDashboard() {
     { label: "Hard", solved: d?.hard_solved ?? 0, total: d?.hard_total ?? 0, fill: "bg-danger", track: "bg-danger-bg" },
   ];
 
+  const hour = new Date().getHours();
+  const greeting = hour < 5 ? "Working late" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const firstName = user?.name?.split(" ")[0] ?? "";
+  const solvedPct =
+    d && d.total_questions > 0 ? Math.round((d.total_solved / d.total_questions) * 100) : 0;
+
+  const kpis = [
+    {
+      label: "Solved",
+      value: (d?.total_solved ?? 0).toLocaleString(),
+      sub: `of ${(d?.total_questions ?? 0).toLocaleString()} problems · ${solvedPct}%`,
+    },
+    { label: "Accuracy", value: `${d?.accuracy ?? 0}%`, sub: "Correct submissions" },
+    {
+      label: "Streak",
+      value: `${d?.current_streak ?? 0}`,
+      unit: d?.current_streak === 1 ? "day" : "days",
+      sub: "Consecutive active days",
+    },
+    { label: "Experience", value: (d?.xp ?? 0).toLocaleString(), unit: "XP", sub: "Earned from solved problems" },
+  ];
+
   return (
     <Page width="wide">
       <PageHeader
-        title={`Welcome back, ${user?.name?.split(" ")[0] ?? ""}`.trim()}
-        description="Your progress across all problems."
+        eyebrow="Overview"
+        title={
+          <>
+            {greeting}
+            {firstName && <span className="italic text-fg-muted">, {firstName}</span>}
+          </>
+        }
+        description="Where you stand across the problem library, and what you worked on last."
+        actions={
+          <LinkButton href="/practice" variant="primary" size="md">
+            <Code2 />
+            Continue practicing
+          </LinkButton>
+        }
       />
 
       {isError && (
@@ -68,31 +101,51 @@ function MemberDashboard() {
         />
       )}
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard title="Solved" value={(d?.total_solved ?? 0).toLocaleString()} subtitle={`of ${(d?.total_questions ?? 0).toLocaleString()} problems`} loading={isLoading} />
-        <StatCard title="Accuracy" value={`${d?.accuracy ?? 0}%`} subtitle="Correct submissions" loading={isLoading} />
-        <StatCard title="Streak" value={`${d?.current_streak ?? 0} ${d?.current_streak === 1 ? "day" : "days"}`} subtitle="Consecutive active days" loading={isLoading} />
-        <StatCard title="XP" value={(d?.xp ?? 0).toLocaleString()} subtitle="Total experience points" loading={isLoading} />
-      </div>
-
-      {/* Contribution heatmap */}
-      <Card className="mt-4">
-        <CardHeader>
-          <div>
-            <CardTitle>Activity</CardTitle>
-            <CardDescription>Submissions over the last 26 weeks</CardDescription>
-          </div>
-        </CardHeader>
-        <CardBody>
-          {isLoading ? (
-            <Skeleton className="h-28 w-full" />
-          ) : (
-            <ActivityHeatmap data={d?.activity_calendar ?? []} />
-          )}
-        </CardBody>
+      {/* KPI strip — one instrument panel rather than four loose tiles */}
+      <Card className="overflow-hidden">
+        <div className="grid grid-cols-2 gap-px bg-line lg:grid-cols-4">
+          {kpis.map((k) => (
+            <div key={k.label} className="bg-surface px-5 py-4">
+              <p className="eyebrow">{k.label}</p>
+              {isLoading ? (
+                <Skeleton className="mt-2.5 h-8 w-20" />
+              ) : (
+                <p className="mt-2 flex items-baseline gap-1.5 text-[1.75rem] font-semibold leading-8 tracking-[-0.025em] text-fg tabular-nums">
+                  {k.value}
+                  {k.unit && <span className="text-sm font-medium tracking-normal text-fg-subtle">{k.unit}</span>}
+                </p>
+              )}
+              <p className="mt-1 truncate text-xs text-fg-subtle tabular-nums">{k.sub}</p>
+            </div>
+          ))}
+        </div>
+        {/* overall completion rule */}
+        <div className="h-1 bg-surface-2" aria-hidden>
+          <div
+            className="h-full bg-accent-text/70 transition-[width] duration-700 ease-out"
+            style={{ width: `${isLoading ? 0 : solvedPct}%` }}
+          />
+        </div>
       </Card>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-5">
+        {/* Contribution heatmap */}
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <div>
+              <CardTitle>Activity</CardTitle>
+              <CardDescription>Submissions over the last 26 weeks</CardDescription>
+            </div>
+          </CardHeader>
+          <CardBody>
+            {isLoading ? (
+              <Skeleton className="h-28 w-full" />
+            ) : (
+              <ActivityHeatmap data={d?.activity_calendar ?? []} />
+            )}
+          </CardBody>
+        </Card>
+
         <Card className="lg:col-span-2">
           <CardHeader>
             <div>
@@ -127,8 +180,10 @@ function MemberDashboard() {
             })}
           </CardBody>
         </Card>
+      </div>
 
-        <Card className="overflow-hidden lg:col-span-3">
+      <div className="mt-4">
+        <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle>Recent submissions</CardTitle>
             <LinkButton href="/practice" variant="ghost" size="sm">
@@ -212,22 +267,32 @@ function GuestDashboard() {
 
   return (
     <Page width="wide">
-      <PageHeader title="Dashboard" description="Practice SQL on real databases." />
-
-      <Card className="overflow-hidden">
-        <CardBody className="flex flex-col items-start gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="max-w-xl">
-            <div className="mb-3 inline-flex size-10 items-center justify-center rounded-lg border border-accent-line bg-accent-subtle text-accent-text">
-              <Activity className="size-5" aria-hidden />
-            </div>
-            <h2 className="text-lg font-semibold tracking-tight text-fg">Start practicing in seconds</h2>
-            <p className="mt-1.5 text-sm text-fg-muted">
-              Browse {totalProblems ? `${totalProblems} ` : ""}problems and run queries right away. Create a
-              free account when you want to save progress, earn XP, and track your streak.
+      {/* Editorial hero */}
+      <section className="relative overflow-hidden rounded-xl border border-line bg-surface shadow-[var(--highlight),var(--shadow-card)]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 [background-image:radial-gradient(var(--line-strong)_1px,transparent_0)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_at_85%_20%,black,transparent_60%)] opacity-70"
+        />
+        <div className="relative grid gap-8 px-6 py-10 sm:px-10 sm:py-12 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+          <div>
+            <p className="eyebrow">
+              <Activity className="mr-1.5 inline size-3 -translate-y-px" aria-hidden />
+              The SQL workspace
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <LinkButton href="/practice" variant="primary" size="lg">
+            <h1 className="mt-3 font-display text-4xl font-normal tracking-[-0.015em] text-fg sm:text-[3.25rem] sm:leading-[3.4rem]">
+              Write sharper SQL,
+              <br />
+              <span className="italic text-fg-muted">one query at a time.</span>
+            </h1>
+            <p className="mt-4 max-w-lg text-sm leading-6 text-fg-muted">
+              {totalProblems ? `${totalProblems.toLocaleString()} interview-grade` : "Interview-grade"} problems,
+              run against real databases in your browser. No account needed to start — create one when you want to keep your
+              progress.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              <LinkButton href="/practice" variant="primary" size="lg" className="group">
                 Browse problems
+                <ArrowRight className="transition-transform group-hover:translate-x-0.5" aria-hidden />
               </LinkButton>
               <Button variant="secondary" size="lg" onClick={() => openAuth({ mode: "signup" })}>
                 Create account
@@ -237,20 +302,50 @@ function GuestDashboard() {
               </Button>
             </div>
           </div>
-        </CardBody>
-      </Card>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-3">
-        {features.map((f) => (
-          <Card key={f.title} className="p-5">
-            <div className="mb-3 inline-flex size-8 items-center justify-center rounded-md bg-surface-2 text-fg-subtle">
-              <f.icon className="size-4" strokeWidth={1.75} aria-hidden />
+          {/* A real query, set like a specimen */}
+          <figure className="hidden overflow-hidden rounded-lg border border-line bg-canvas font-mono text-xs leading-6 lg:block">
+            <figcaption className="flex h-8 items-center justify-between border-b border-line px-3">
+              <span className="font-mono text-2xs text-fg-subtle">query.sql</span>
+              <span className="flex gap-1" aria-hidden>
+                <span className="size-2 rounded-full bg-line-strong" />
+                <span className="size-2 rounded-full bg-line-strong" />
+                <span className="size-2 rounded-full bg-line-strong" />
+              </span>
+            </figcaption>
+            <pre className="px-4 py-3 text-fg-muted">
+              <span className="text-accent-text">SELECT</span> department, <span className="text-accent-text">AVG</span>(salary){"\n"}
+              <span className="text-accent-text">FROM</span>   employees{"\n"}
+              <span className="text-accent-text">GROUP BY</span> department{"\n"}
+              <span className="text-accent-text">HAVING</span> <span className="text-accent-text">COUNT</span>(*) &gt; <span className="text-warning">5</span>{"\n"}
+              <span className="text-accent-text">ORDER BY</span> <span className="text-fg-faint">2</span> <span className="text-accent-text">DESC</span>;
+            </pre>
+            <div className="flex items-center justify-between border-t border-line px-3 py-1.5 text-2xs text-fg-subtle">
+              <span>4 rows · 3.1 ms</span>
+              <span className="inline-flex items-center gap-1 text-success">
+                <CheckCircle2 className="size-3" aria-hidden /> Correct
+              </span>
             </div>
-            <p className="text-sm font-medium text-fg">{f.title}</p>
-            <p className="mt-1 text-sm text-fg-subtle">{f.desc}</p>
-          </Card>
-        ))}
-      </div>
+          </figure>
+        </div>
+      </section>
+
+      {/* What you get — one strip, three columns */}
+      <Card className="mt-4 overflow-hidden">
+        <div className="grid gap-px bg-line sm:grid-cols-3">
+          {features.map((f, i) => (
+            <div key={f.title} className="bg-surface p-6">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs text-fg-faint tabular-nums">0{i + 1}</span>
+                <span className="h-px flex-1 bg-line" aria-hidden />
+                <f.icon className="size-4 text-fg-subtle" strokeWidth={1.75} aria-hidden />
+              </div>
+              <p className="mt-4 text-sm font-semibold text-fg">{f.title}</p>
+              <p className="mt-1 text-sm leading-6 text-fg-subtle">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
     </Page>
   );
 }

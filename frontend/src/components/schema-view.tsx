@@ -103,7 +103,7 @@ export function SchemaView({
       {view === "tables" && tables.length > 0 ? (
         <div className="space-y-3">
           {tables.map((t) => (
-            <div key={t.name} className="overflow-hidden rounded-md border border-line">
+            <div key={t.name} className="overflow-hidden rounded-lg border border-line bg-surface shadow-xs">
               <div className="flex items-center gap-2 border-b border-line bg-surface-2 px-3 py-2">
                 <Table2 className="size-3.5 text-fg-subtle" aria-hidden />
                 <span className="font-mono text-xs font-medium text-fg">{t.name}</span>

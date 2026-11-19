@@ -9,28 +9,29 @@ import { cn } from "@/lib/utils";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap select-none",
-    "rounded-md border font-medium transition-colors",
-    "disabled:pointer-events-none disabled:opacity-50",
+    "rounded-md border font-medium tracking-[-0.005em]",
+    "transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out",
+    "active:scale-[0.975] disabled:pointer-events-none disabled:opacity-45",
     "[&_svg]:shrink-0",
   ],
   {
     variants: {
       variant: {
         primary:
-          "border-transparent bg-accent text-accent-fg hover:bg-accent-hover active:bg-accent-active",
+          "border-transparent bg-accent text-accent-fg shadow-[var(--highlight),var(--shadow-xs)] hover:bg-accent-hover active:bg-accent-active",
         secondary:
-          "border-line bg-surface text-fg hover:bg-surface-2 active:bg-surface-3 dark:border-transparent dark:bg-surface-2 dark:hover:bg-surface-3",
+          "border-line bg-surface text-fg shadow-xs hover:border-line-strong hover:bg-surface-2 active:bg-surface-3",
         ghost:
           "border-transparent bg-transparent text-fg-muted hover:bg-surface-2 hover:text-fg active:bg-surface-3",
         destructive:
-          "border-transparent bg-danger-solid text-white hover:opacity-90",
+          "border-transparent bg-danger-solid text-white shadow-xs hover:brightness-110",
         "destructive-ghost":
           "border-transparent bg-transparent text-fg-muted hover:bg-danger-bg hover:text-danger",
       },
       size: {
         sm: "h-8 px-3 text-xs [&_svg]:size-3.5",
         md: "h-9 px-3.5 text-sm [&_svg]:size-4",
-        lg: "h-10 px-4 text-sm [&_svg]:size-4",
+        lg: "h-10 px-[1.125rem] text-sm [&_svg]:size-4",
         icon: "h-9 w-9 [&_svg]:size-4",
         "icon-sm": "h-8 w-8 [&_svg]:size-4",
         "icon-xs": "h-7 w-7 [&_svg]:size-3.5",

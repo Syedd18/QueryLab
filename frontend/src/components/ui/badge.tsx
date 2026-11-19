@@ -4,16 +4,16 @@ import { cn } from "@/lib/utils";
 
 /* Soft-filled chips. Color is status, never decoration. */
 const badgeVariants = cva(
-  "inline-flex h-5 shrink-0 items-center gap-1 whitespace-nowrap rounded-sm border border-transparent px-2 text-xs font-medium tabular-nums",
+  "inline-flex h-5 shrink-0 items-center gap-1 whitespace-nowrap rounded-sm border px-1.5 text-[0.71875rem] font-medium leading-none tabular-nums",
   {
     variants: {
       tone: {
-        neutral: "bg-surface-3 text-fg-muted",
+        neutral: "border-line bg-surface-2 text-fg-muted",
         outline: "border-line-strong bg-transparent text-fg-muted",
-        accent: "bg-accent-subtle text-accent-text",
-        success: "bg-success-bg text-success",
-        warning: "bg-warning-bg text-warning",
-        danger: "bg-danger-bg text-danger",
+        accent: "border-accent-line bg-accent-subtle text-accent-text",
+        success: "border-success-line bg-success-bg text-success",
+        warning: "border-warning-line bg-warning-bg text-warning",
+        danger: "border-danger-line bg-danger-bg text-danger",
       },
     },
     defaultVariants: { tone: "neutral" },

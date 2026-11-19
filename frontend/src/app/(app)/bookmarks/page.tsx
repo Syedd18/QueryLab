@@ -26,10 +26,18 @@ export default function BookmarksPage() {
     enabled: isAuthenticated,
   });
 
+  // Declared before any early return so hook order never changes between renders.
+  const removeMutation = useMutation({
+    mutationFn: (questionId: string) => bookmarksApi.remove(questionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+    },
+  });
+
   if (!isAuthenticated) {
     return (
       <Page>
-        <PageHeader title="Bookmarks" description="Save problems to revisit them later." />
+        <PageHeader eyebrow="My activity" title="Bookmarks" description="Save problems to revisit them later." />
         <Card className="overflow-hidden">
           <EmptyState
             icon={Bookmark}
@@ -51,18 +59,12 @@ export default function BookmarksPage() {
     );
   }
 
-  const removeMutation = useMutation({
-    mutationFn: (questionId: string) => bookmarksApi.remove(questionId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
-    },
-  });
-
   const list = bookmarks ?? [];
 
   return (
     <Page>
       <PageHeader
+        eyebrow="My activity"
         title="Bookmarks"
         description={
           isLoading ? "Problems you saved for later." : `${list.length} saved ${list.length === 1 ? "problem" : "problems"}.`

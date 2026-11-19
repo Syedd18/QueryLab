@@ -47,7 +47,7 @@ export function TableRow({
   return (
     <tr
       className={cn(
-        "border-b border-line last:border-b-0 transition-colors",
+        "border-b border-line last:border-b-0 transition-colors duration-150 hover:bg-surface-2/60",
         interactive && "cursor-pointer hover:bg-surface-2",
         selected && "bg-accent-subtle hover:bg-accent-subtle",
         className
@@ -83,7 +83,7 @@ export function TableHeaderCell({
       scope="col"
       aria-sort={sortable ? ariaSort ?? "none" : undefined}
       className={cn(
-        "h-9 whitespace-nowrap border-b border-line bg-surface-2 px-3 text-xs font-medium text-fg-subtle",
+        "h-9 whitespace-nowrap border-b border-line bg-surface-2 px-4 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.06em] text-fg-subtle",
         alignClass,
         className
       )}
@@ -94,7 +94,7 @@ export function TableHeaderCell({
           type="button"
           onClick={onSort}
           className={cn(
-            "group -mx-1 inline-flex h-6 items-center gap-1 rounded-sm px-1 hover:text-fg",
+            "group -mx-1 inline-flex h-6 items-center gap-1 rounded-sm px-1 [letter-spacing:inherit] [text-transform:inherit] transition-colors hover:text-fg",
             sorted && "text-fg",
             align === "right" && "flex-row-reverse"
           )}
@@ -128,7 +128,7 @@ export function TableCell({
   return (
     <td
       className={cn(
-        "px-3 py-2 align-middle text-fg",
+        "px-4 py-2.5 align-middle text-fg",
         align === "right" && "text-right",
         align === "center" && "text-center",
         className

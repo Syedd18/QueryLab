@@ -11,22 +11,22 @@ import { fadeUp, normal } from "@/lib/motion";
    qryntiq identity frames). Literal hexes from the dark collection keep it
    constant regardless of the active theme. */
 const D = {
-  bg: "#121416",
-  panel: "#191c1f",
-  surface: "#1d2125",
-  surface2: "#22272b",
-  line: "#30353a",
-  lineSoft: "#292e33",
-  white: "#ffffff",
-  text: "#e5e7e9",
-  muted: "#a0a5aa",
-  faint: "#777f87",
-  accent: "#7893ad",
-  accentText: "#7893ad",
-  green: "#729c7c",
-  greenBg: "#29352c",
-  amber: "#c5a36a",
-  amberBg: "#383225",
+  bg: "#101214",
+  panel: "#16181b",
+  surface: "#16181b",
+  surface2: "#1c1f23",
+  line: "#2a2e33",
+  lineSoft: "#22262b",
+  white: "#f4f2ee",
+  text: "#e9e7e2",
+  muted: "#aeaca6",
+  faint: "#65646a",
+  accent: "#b3c7da",
+  accentText: "#9fbad4",
+  green: "#84b493",
+  greenBg: "#17241c",
+  amber: "#d7b06e",
+  amberBg: "#28211a",
 };
 
 /** A compact, always-dark rendering of the practice console. Not an illustration —
@@ -57,7 +57,7 @@ function ConsoleMock() {
           </span>
           <span
             className="inline-flex h-7 items-center rounded-md px-2.5 text-xs font-medium"
-            style={{ backgroundColor: D.accent, color: D.white }}
+            style={{ backgroundColor: D.accent, color: "#0f1822" }}
           >
             Submit
           </span>
@@ -151,7 +151,7 @@ function BrandPanel() {
   return (
     <aside
       className="relative hidden h-full flex-col justify-between overflow-hidden p-10 lg:flex xl:p-12"
-      style={{ backgroundColor: D.bg, color: D.text }}
+      style={{ backgroundColor: D.bg, color: D.text, borderRight: `1px solid ${D.line}` }}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -183,10 +183,14 @@ function BrandPanel() {
       <div className="my-10 flex flex-1 flex-col justify-center gap-8">
         <div className="max-w-md">
           <h2
-            className="text-[2.1rem] font-semibold leading-[1.08] tracking-tight"
+            className="font-display text-[3.25rem] font-normal leading-[1.02] tracking-[-0.015em]"
             style={{ color: D.white }}
           >
-            Precision in every query.
+            Precision in
+            <br />
+            <span className="italic" style={{ color: D.muted }}>
+              every query.
+            </span>
           </h2>
           <p className="mt-4 text-sm leading-6" style={{ color: D.muted }}>
             A dedicated environment for deliberate SQL practice, real-world problems, and interview
@@ -246,17 +250,17 @@ export function AuthShell({
 
         <div className="relative z-10 flex flex-1 items-center justify-center overflow-y-auto px-6 pb-10 pt-2 sm:pt-0 lg:px-10">
           <motion.div {...fadeUp} transition={normal} className="w-full max-w-[25rem]">
-            <Card className="overflow-hidden p-0 shadow-[0_1px_3px_rgba(16,24,40,0.05),0_18px_50px_-14px_rgba(16,24,40,0.18)]">
-              {/* Top accent keeps the card branded without decoration. */}
-              <div className="h-[3px] w-full bg-accent" />
-              <div className="p-7 sm:p-8">
+            <Card className="overflow-hidden rounded-xl p-0 shadow-[var(--highlight),var(--shadow-overlay)]">
+              <div className="p-7 sm:p-9">
                 {Icon && (
-                  <span className="mb-5 inline-flex size-11 items-center justify-center rounded-lg border border-accent-line bg-accent-subtle text-accent-text">
-                    <Icon className="size-5" strokeWidth={1.75} aria-hidden />
+                  <span className="mb-6 inline-flex size-10 items-center justify-center rounded-lg border border-line bg-surface-2 text-fg-muted shadow-xs">
+                    <Icon className="size-[18px]" strokeWidth={1.6} aria-hidden />
                   </span>
                 )}
-                <h1 className="text-xl font-semibold tracking-tight text-fg">{title}</h1>
-                {description && <p className="mt-1.5 text-sm text-fg-subtle">{description}</p>}
+                <h1 className="font-display text-[2.125rem] font-normal leading-[2.375rem] tracking-[-0.012em] text-fg">
+                  {title}
+                </h1>
+                {description && <p className="mt-2 text-sm text-fg-muted">{description}</p>}
                 <div className="mt-7">{children}</div>
               </div>
             </Card>

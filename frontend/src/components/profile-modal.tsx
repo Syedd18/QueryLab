@@ -88,6 +88,7 @@ function ProfileDialog({ open, onClose }: { open: boolean; onClose: () => void }
       title={editing ? "Edit profile" : "Your profile"}
       description={editing ? "Update your details and avatar." : undefined}
       className="max-w-lg"
+      headerless={!editing}
       footer={
         editing ? (
           <>
@@ -181,34 +182,46 @@ function ProfileDialog({ open, onClose }: { open: boolean; onClose: () => void }
           </Field>
         </div>
       ) : (
-        <div className="space-y-5">
-          <div className="flex items-center gap-4">
-            <Avatar name={user.name} src={user.avatar_url} size="xl" />
-            <div className="min-w-0">
-              <p className="truncate text-md font-semibold text-fg">{user.name}</p>
-              <p className="truncate text-sm text-fg-subtle">{user.email}</p>
-              <div className="mt-1.5 flex items-center gap-2 text-xs text-fg-subtle">
-                <span>{user.is_admin ? "Admin" : "Member"}</span>
-                <span aria-hidden>·</span>
-                <span>Joined {joined}</span>
+        <div>
+          {/* Identity band — same language as the sign-in modal */}
+          <div className="relative overflow-hidden rounded-t-xl border-b border-line bg-surface-2/60 px-7 pb-6 pt-8">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 [background-image:radial-gradient(var(--line-strong)_1px,transparent_0)] [background-size:16px_16px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)] opacity-60"
+            />
+            <div className="relative flex items-end gap-4">
+              <Avatar
+                name={user.name}
+                src={user.avatar_url}
+                size="xl"
+                className="shadow-[var(--highlight),var(--shadow-raised)] ring-4 ring-surface"
+              />
+              <div className="min-w-0 pb-1">
+                <p className="eyebrow">{user.is_admin ? "Admin" : "Member"} · Joined {joined}</p>
+                <p className="mt-1 truncate font-display text-[1.75rem] leading-8 tracking-[-0.01em] text-fg">
+                  {user.name}
+                </p>
+                <p className="truncate text-sm text-fg-subtle">{user.email}</p>
               </div>
             </div>
           </div>
 
-          {user.bio && <p className="text-sm leading-6 text-fg-muted">{user.bio}</p>}
+          <div className="space-y-5 px-7 py-6">
+            {user.bio && <p className="text-sm leading-6 text-fg-muted">{user.bio}</p>}
 
-          <div className="grid grid-cols-4 gap-px overflow-hidden rounded-md border border-line bg-line">
-            {[
-              { label: "Solved", value: dash?.total_solved ?? "—" },
-              { label: "Accuracy", value: dash ? `${dash.accuracy}%` : "—" },
-              { label: "XP", value: user.xp.toLocaleString() },
-              { label: "Streak", value: user.streak },
-            ].map((s) => (
-              <div key={s.label} className="bg-surface px-3 py-2.5 text-center">
-                <p className="text-md font-semibold text-fg tabular-nums">{s.value}</p>
-                <p className="mt-0.5 text-2xs text-fg-subtle">{s.label}</p>
-              </div>
-            ))}
+            <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
+              {[
+                { label: "Solved", value: dash?.total_solved ?? "—" },
+                { label: "Accuracy", value: dash ? `${dash.accuracy}%` : "—" },
+                { label: "XP", value: user.xp.toLocaleString() },
+                { label: "Streak", value: user.streak },
+              ].map((s) => (
+                <div key={s.label} className="bg-surface px-4 py-3">
+                  <p className="eyebrow">{s.label}</p>
+                  <p className="mt-1 text-xl font-semibold tracking-[-0.02em] text-fg tabular-nums">{s.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

@@ -81,7 +81,7 @@ export default function ProfilePage() {
 
   return (
     <Page>
-      <PageHeader title="Profile" description="Your account and achievements." />
+      <PageHeader eyebrow="Account" title="Profile" description="Your account and achievements." />
 
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Identity */}

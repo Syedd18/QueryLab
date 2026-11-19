@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useState } from "react";
 import {
   LayoutGrid,
@@ -32,7 +32,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Tooltip } from "@/components/ui/tooltip";
 import { fade, quick } from "@/lib/motion";
 
-export const SIDEBAR_WIDTH = 240;
+export const SIDEBAR_WIDTH = 244;
 export const SIDEBAR_COLLAPSED_WIDTH = 64;
 
 type NavItem = {
@@ -71,6 +71,8 @@ export function pageTitleFor(pathname: string | null): string {
   return "Workspace";
 }
 
+const slide = { type: "spring", stiffness: 500, damping: 40, mass: 0.7 } as const;
+
 function NavLink({
   href,
   label,
@@ -78,12 +80,10 @@ function NavLink({
   active,
   collapsed,
   onClick,
-  trailing,
 }: NavItem & {
   active: boolean;
   collapsed: boolean;
   onClick?: () => void;
-  trailing?: React.ReactNode;
 }) {
   const link = (
     <Link
@@ -91,16 +91,28 @@ function NavLink({
       onClick={onClick}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex h-[34px] items-center gap-3 rounded-md px-3 text-sm transition-colors",
+        "group relative flex h-8 items-center gap-2.5 rounded-md px-2.5 text-sm transition-colors duration-150",
         collapsed && "justify-center px-0",
-        active
-          ? "bg-surface-2 font-medium text-fg dark:bg-[#30363B] dark:text-[#F0F1F2] dark:[&>svg]:text-[#A9C0D4]"
-          : "text-fg-muted hover:bg-surface-2 hover:text-fg dark:text-[#A0A5AA] dark:[&>svg]:text-[#858E96] dark:hover:bg-[#292F34] dark:hover:text-[#F0F1F2]"
+        active ? "font-medium text-fg" : "text-fg-muted hover:bg-surface-3/55 hover:text-fg"
       )}
     >
-      <Icon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
-      {!collapsed && <span className="flex-1 truncate">{label}</span>}
-      {!collapsed && trailing}
+      {active && (
+        <motion.span
+          layoutId="nav-active"
+          transition={slide}
+          className="absolute inset-0 rounded-md border border-line bg-surface shadow-[var(--highlight),var(--shadow-xs)]"
+          aria-hidden
+        />
+      )}
+      <Icon
+        className={cn(
+          "relative size-4 shrink-0 transition-colors",
+          active ? "text-accent-text" : "text-fg-subtle group-hover:text-fg-muted"
+        )}
+        strokeWidth={1.75}
+        aria-hidden
+      />
+      {!collapsed && <span className="relative flex-1 truncate">{label}</span>}
     </Link>
   );
   if (collapsed) {
@@ -111,14 +123,6 @@ function NavLink({
     );
   }
   return link;
-}
-
-function GroupLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mb-2 px-3 text-2xs font-medium uppercase tracking-[0.08em] text-fg-faint dark:text-[#777F87]">
-      {children}
-    </p>
-  );
 }
 
 export function Sidebar() {
@@ -132,22 +136,17 @@ export function Sidebar() {
   const isActive = (href: string) => pathname === href || pathname?.startsWith(href + "/");
 
   const content = (isCollapsed: boolean, closeMobile?: () => void) => (
-    <div className="flex h-full flex-col bg-surface dark:bg-[#1b1f22]">
-      {/* Header */}
-      <div
-        className={cn(
-          "flex h-16 shrink-0 items-center px-5",
-          isCollapsed && "justify-center px-0"
-        )}
-      >
+    <div className="flex h-full flex-col bg-sidebar">
+      {/* Header — same 56px rhythm as the top bar so the rules line up */}
+      <div className={cn("flex h-14 shrink-0 items-center px-4", isCollapsed && "justify-center px-0")}>
         <Link href="/dashboard" className="rounded-md" aria-label="qryntiq home">
-          <Logo compact={isCollapsed} className="dark:[&_svg]:text-[#7893AD]" />
+          <Logo compact={isCollapsed} />
         </Link>
         {!isCollapsed && (
           <Button
             variant="ghost"
             size="icon-sm"
-            className="ml-auto hidden text-fg-subtle hover:bg-[#292F34] dark:text-[#858E96] dark:hover:bg-[#292F34] dark:hover:text-[#F0F1F2] lg:inline-flex"
+            className="ml-auto hidden text-fg-subtle lg:inline-flex"
             onClick={() => setCollapsed(true)}
             aria-label="Collapse sidebar"
             aria-expanded
@@ -158,23 +157,23 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 pb-4 pt-2" aria-label="Main">
+      <nav className="flex-1 overflow-y-auto px-3 pb-4 pt-3" aria-label="Main">
         {groups.map((group, gi) => {
           const items = group.items.filter((i) => !i.adminOnly || user?.is_admin);
           if (items.length === 0) return null;
           return (
-            <div key={group.label} className={cn(gi > 0 && "mt-6")}>
+            <div key={group.label} className={cn(gi > 0 && "mt-7")}>
               {!isCollapsed ? (
-                <GroupLabel>{group.label}</GroupLabel>
+                <p className="eyebrow mb-2 px-2.5 text-fg-faint">{group.label}</p>
               ) : (
-                gi > 0 && <div className="mx-3 mb-3 border-t border-line dark:border-[#383E43]" />
+                gi > 0 && <div className="mx-3 mb-4 border-t border-line" />
               )}
               <div className="space-y-0.5">
                 {items.map((item) => (
                   <NavLink
                     key={item.href}
                     {...item}
-                    active={isActive(item.href)}
+                    active={!!isActive(item.href)}
                     collapsed={isCollapsed}
                     onClick={closeMobile}
                   />
@@ -188,7 +187,7 @@ export function Sidebar() {
             <Button
               variant="ghost"
               size="icon-sm"
-              className="text-fg-subtle hover:bg-[#292F34] dark:text-[#858E96] dark:hover:bg-[#292F34] dark:hover:text-[#F0F1F2]"
+              className="text-fg-subtle"
               onClick={() => setCollapsed(false)}
               aria-label="Expand sidebar"
               aria-expanded={false}
@@ -200,25 +199,23 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="shrink-0 border-t border-line px-3 py-3 dark:border-[#383E43]">
-        <div className="space-y-0.5">
-          {isAuthenticated && (
-            <button
-              type="button"
-              onClick={() => {
-                openProfile();
-                closeMobile?.();
-              }}
-              className={cn(
-                "flex h-[34px] w-full items-center gap-3 rounded-md px-3 text-sm font-medium text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg dark:text-[#A0A5AA] dark:hover:bg-[#292F34] dark:hover:text-[#F0F1F2] dark:[&>svg]:text-[#858E96]",
-                isCollapsed && "justify-center px-0"
-              )}
-            >
-              <Settings className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
-              {!isCollapsed && <span>Settings</span>}
-            </button>
-          )}
-        </div>
+      <div className="shrink-0 border-t border-line px-3 py-3">
+        {isAuthenticated && (
+          <button
+            type="button"
+            onClick={() => {
+              openProfile();
+              closeMobile?.();
+            }}
+            className={cn(
+              "group flex h-8 w-full items-center gap-2.5 rounded-md px-2.5 text-sm text-fg-muted transition-colors hover:bg-surface-3/55 hover:text-fg",
+              isCollapsed && "justify-center px-0"
+            )}
+          >
+            <Settings className="size-4 shrink-0 text-fg-subtle group-hover:text-fg-muted" strokeWidth={1.75} aria-hidden />
+            {!isCollapsed && <span>Settings</span>}
+          </button>
+        )}
 
         {isAuthenticated ? (
           <div className={cn("mt-2 flex items-center gap-1", isCollapsed && "justify-center")}>
@@ -229,11 +226,16 @@ export function Sidebar() {
                 closeMobile?.();
               }}
               className={cn(
-                "flex min-w-0 flex-1 items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-surface-2 dark:hover:bg-[#292F34]",
+                "flex min-w-0 flex-1 items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-surface-3/55",
                 isCollapsed && "flex-none justify-center px-0"
               )}
             >
-              <Avatar name={user?.name} src={user?.avatar_url} size="md" className="border-transparent bg-accent-subtle text-accent-text dark:bg-[#30363B] dark:text-[#A9C0D4]" />
+              <Avatar
+                name={user?.name}
+                src={user?.avatar_url}
+                size="md"
+                className="border-line bg-accent-subtle text-accent-text"
+              />
               {!isCollapsed && (
                 <>
                   <span className="min-w-0 flex-1">
@@ -247,8 +249,8 @@ export function Sidebar() {
               )}
             </button>
             {!isCollapsed && (
-              <Tooltip label="Sign out">
-                <Button variant="ghost" size="icon-sm" onClick={logout} aria-label="Sign out" className="text-fg-subtle dark:text-[#858E96] dark:hover:bg-[#292F34] dark:hover:text-[#F0F1F2]">
+              <Tooltip label="Sign out" side="top">
+                <Button variant="ghost" size="icon-sm" onClick={logout} aria-label="Sign out" className="text-fg-subtle">
                   <LogOut strokeWidth={1.75} />
                 </Button>
               </Tooltip>
@@ -256,19 +258,22 @@ export function Sidebar() {
           </div>
         ) : isCollapsed ? (
           <div className="mt-2 flex justify-center">
-            <Tooltip label="Sign in">
-              <Button variant="ghost" size="icon" aria-label="Sign in" onClick={() => openAuth({ mode: "login" })} className="dark:text-[#858E96] dark:hover:bg-[#292F34] dark:hover:text-[#F0F1F2]">
+            <Tooltip label="Sign in" side="top">
+              <Button variant="ghost" size="icon" aria-label="Sign in" onClick={() => openAuth({ mode: "login" })}>
                 <LogIn strokeWidth={1.75} />
               </Button>
             </Tooltip>
           </div>
         ) : (
-          <div className="mt-2 space-y-1.5">
-            <Button variant="primary" size="sm" className="w-full" onClick={() => openAuth({ mode: "login" })}>
-              Sign in
-            </Button>
-            <Button variant="secondary" size="sm" className="w-full" onClick={() => openAuth({ mode: "signup" })}>
+          <div className="space-y-1.5">
+            <p className="px-1 pb-1 text-xs leading-5 text-fg-subtle">
+              Save progress, earn XP, and keep your streak.
+            </p>
+            <Button variant="primary" size="sm" className="w-full" onClick={() => openAuth({ mode: "signup" })}>
               Create account
+            </Button>
+            <Button variant="secondary" size="sm" className="w-full" onClick={() => openAuth({ mode: "login" })}>
+              Sign in
             </Button>
           </div>
         )}
@@ -279,7 +284,7 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <header       className="fixed inset-x-0 top-0 z-40 flex h-12 items-center gap-2 border-b border-line bg-surface px-3 dark:border-[#383E43] dark:bg-[#1b1f22] lg:hidden">
+      <header className="fixed inset-x-0 top-0 z-40 flex h-12 items-center gap-2 border-b border-line bg-sidebar/95 px-3 backdrop-blur-sm lg:hidden">
         <Button
           variant="ghost"
           size="icon-sm"
@@ -289,7 +294,7 @@ export function Sidebar() {
         >
           <Menu strokeWidth={1.75} />
         </Button>
-        <Logo className="dark:[&_svg]:text-[#7893AD]" />
+        <Logo />
         <ThemeToggle className="ml-auto text-fg-muted" />
       </header>
 
@@ -300,40 +305,40 @@ export function Sidebar() {
             <motion.div
               {...fade}
               transition={quick}
-              className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+              className="fixed inset-0 z-40 bg-[rgb(20_20_22/0.42)] dark:bg-[rgb(0_0_0/0.6)] lg:hidden"
               onClick={() => setMobileOpen(false)}
               aria-hidden
             />
             <motion.aside
-              initial={{ x: -8, opacity: 0 }}
+              initial={{ x: -16, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -8, opacity: 0 }}
-              transition={quick}
-              className="fixed inset-y-0 left-0 z-50 w-[280px] max-w-[85vw] border-r border-line bg-surface dark:border-[#383E43] dark:bg-[#1b1f22] lg:hidden"
+              exit={{ x: -16, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-y-0 left-0 z-50 w-[280px] max-w-[85vw] border-r border-line shadow-overlay lg:hidden"
               aria-label="Navigation"
             >
               <Button
                 variant="ghost"
                 size="icon-sm"
-                className="absolute right-3 top-4"
+                className="absolute right-3 top-3 z-10"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close navigation"
               >
                 <X strokeWidth={1.75} />
               </Button>
-              {content(false, () => setMobileOpen(false))}
+              <LayoutGroup id="nav-mobile">{content(false, () => setMobileOpen(false))}</LayoutGroup>
             </motion.aside>
           </>
         )}
       </AnimatePresence>
 
-      {/* Desktop sidebar: 240px, collapses to a 64px rail */}
+      {/* Desktop sidebar: collapses to a 64px rail */}
       <aside
         style={{ width: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH }}
-        className="sticky top-0 hidden h-dvh shrink-0 border-r border-line bg-surface transition-[width] duration-150 ease-out dark:border-[#383E43] dark:bg-[#1b1f22] lg:block"
+        className="sticky top-0 hidden h-dvh shrink-0 border-r border-line transition-[width] duration-200 ease-out lg:block"
         aria-label="Navigation"
       >
-        {content(collapsed)}
+        <LayoutGroup id="nav-desktop">{content(collapsed)}</LayoutGroup>
       </aside>
     </>
   );

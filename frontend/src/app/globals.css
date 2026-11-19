@@ -1,90 +1,107 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 /* ──────────────────────────────────────────────────────────────────────────
-   qryntiq design tokens
-   Values follow the qryntiq Figma system (dark + light collections).
-   Raw values live on :root / .dark; Tailwind utilities are generated from the
-   semantic aliases in @theme, so the whole UI reads from one place.
+   qryntiq design tokens — "ink on paper" (light) and "graphite" (dark).
+
+   One signature accent, steel-ink, is derived from the logo and shared by
+   both themes. Neutrals are warm, never blue-gray. Raw values live on :root
+   and .dark; Tailwind utilities are generated from the aliases in @theme,
+   so the whole interface reads from this one place.
    ────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Surfaces: background < surface < elevated < hover */
-  --canvas: #f8f9fb;        /* color/background */
-  --surface: #ffffff;       /* color/surface */
-  --surface-2: #f1f3f5;     /* color/elevated */
-  --surface-3: #e8ebf0;     /* hover step */
-  --line: #e0e4ea;          /* color/border */
-  --line-strong: #cfd5de;
+  /* Surfaces: canvas < surface < raised; surface-2/3 are inset + hover steps */
+  --canvas: #f5f4f0;
+  --surface: #fffefc;
+  --surface-2: #f3f1ec;
+  --surface-3: #e9e6df;
+  --line: #e4e1d9;
+  --line-strong: #d2cec4;
 
-  /* Text */
-  --fg: #171a21;            /* color/text */
-  --fg-muted: #667085;      /* color/muted */
-  --fg-subtle: #7d8696;
-  --fg-faint: #a8b0bd;
+  /* Ink */
+  --fg: #1b1b1d;
+  --fg-muted: #57575e;
+  --fg-subtle: #75757b;
+  --fg-faint: #a5a39d;
 
-  /* One accent */
-  --accent: #2563eb;        /* color/accent */
-  --accent-hover: #1f58d8;
-  --accent-active: #1b4dbf;
+  /* Steel-ink accent */
+  --accent: #2c4c6e;
+  --accent-hover: #24415f;
+  --accent-active: #1d3651;
   --accent-fg: #ffffff;
-  --accent-text: #245dd1;   /* color/link */
-  --accent-subtle: #eaf0fe; /* color/accent-soft */
-  --accent-line: #c7d7fb;
+  --accent-text: #2f5d8a;
+  --accent-subtle: #e9eef3;
+  --accent-line: #c6d3e0;
 
-  /* Status: only when it means something */
-  --success: #267652;       /* color/green */
-  --success-bg: #eaf6ef;    /* color/green-soft */
-  --success-line: #c4e5d2;
-  --warning: #8e641d;       /* color/amber */
-  --warning-bg: #faf2e3;    /* color/amber-soft */
-  --warning-line: #ecd9ad;
-  --danger: #ba4646;        /* color/red */
-  --danger-solid: #ba4646;
-  --danger-bg: #fbeded;     /* color/red-soft */
-  --danger-line: #f1c9c9;
+  /* Status — muted, only when it carries meaning */
+  --success: #2c7650;
+  --success-bg: #e8f1eb;
+  --success-line: #c3dbcb;
+  --warning: #96661a;
+  --warning-bg: #f6eedd;
+  --warning-line: #e4cfa4;
+  --danger: #b0413a;
+  --danger-solid: #b0413a;
+  --danger-bg: #f8e8e6;
+  --danger-line: #ebc6c1;
 
-  --overlay-shadow: 0 1px 2px rgb(23 26 33 / 0.04), 0 8px 24px rgb(23 26 33 / 0.08);
-  --selection: #dbe6fd;
+  /* Elevation */
+  --shadow-xs: 0 1px 0 rgb(27 27 29 / 0.03);
+  --shadow-card: 0 1px 0 rgb(27 27 29 / 0.025), 0 1px 3px rgb(27 27 29 / 0.04);
+  --shadow-raised: 0 1px 2px rgb(27 27 29 / 0.05), 0 6px 16px -6px rgb(27 27 29 / 0.12);
+  --shadow-overlay: 0 1px 2px rgb(27 27 29 / 0.06), 0 18px 44px -10px rgb(27 27 29 / 0.22);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.6);
+
+  --selection: #d5e0eb;
+  --sidebar: #efede7;
+  --editor-bg: #fffefc;
   color-scheme: light;
 }
 
 .dark {
-  --canvas: #121416;
-  --surface: #1d2125;
-  --surface-2: #22272b;
-  --surface-3: #2d3339;
-  --line: #30353a;
-  --line-strong: #41484f;
+  --canvas: #101214;
+  --surface: #16181b;
+  --surface-2: #1c1f23;
+  --surface-3: #25292e;
+  --line: #262a2f;
+  --line-strong: #363b42;
 
-  --fg: #e5e7e9;
-  --fg-muted: #a0a5aa;
-  --fg-subtle: #a0a5aa;
-  --fg-faint: #777f87;
+  --fg: #e9e7e2;
+  --fg-muted: #aeaca6;
+  --fg-subtle: #8d8b86;
+  --fg-faint: #65646a;
 
-  --accent: #526f8b;
-  --accent-hover: #627f9b;
-  --accent-active: #465f77;
-  --accent-fg: #ffffff;
-  --accent-text: #7893ad;
-  --accent-subtle: #29333d;
-  --accent-line: #465869;
+  /* In dark, primary actions are light steel with ink text. */
+  --accent: #b3c7da;
+  --accent-hover: #c5d5e4;
+  --accent-active: #9fb5cb;
+  --accent-fg: #0f1822;
+  --accent-text: #9fbad4;
+  --accent-subtle: #1a232d;
+  --accent-line: #2d3d4e;
 
-  --success: #729c7c;
-  --success-bg: #29352c;
-  --success-line: #4a6650;
-  --warning: #c5a36a;
-  --warning-bg: #383225;
-  --warning-line: #6d5b3e;
-  --danger: #c77c78;
-  --danger-solid: #c77c78;
-  --danger-bg: #3b2929;
-  --danger-line: #694847;
+  --success: #84b493;
+  --success-bg: #17241c;
+  --success-line: #2a4434;
+  --warning: #d7b06e;
+  --warning-bg: #28211a;
+  --warning-line: #4a3c24;
+  --danger: #e3897f;
+  --danger-solid: #c4574d;
+  --danger-bg: #2a1918;
+  --danger-line: #4e2c28;
 
-  --overlay-shadow: 0 1px 2px rgb(0 0 0 / 0.48), 0 8px 24px rgb(0 0 0 / 0.24);
-  --selection: #3b4b5a;
+  --shadow-xs: 0 1px 0 rgb(0 0 0 / 0.3);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 20px -6px rgb(0 0 0 / 0.55);
+  --shadow-overlay: 0 0 0 1px rgb(0 0 0 / 0.35), 0 22px 50px -12px rgb(0 0 0 / 0.75);
+  --highlight: inset 0 1px 0 rgb(255 255 255 / 0.035);
+
+  --selection: #2b3c4f;
+  --sidebar: #131518;
+  --editor-bg: #131518;
   color-scheme: dark;
 }
 
@@ -93,6 +110,7 @@
   --color-*: initial;
   --color-white: #ffffff;
   --color-black: #000000;
+  --color-transparent: transparent;
 
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
@@ -100,6 +118,7 @@
   --color-surface-3: var(--surface-3);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
+  --color-sidebar: var(--sidebar);
 
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
@@ -125,13 +144,12 @@
   --color-danger-bg: var(--danger-bg);
   --color-danger-line: var(--danger-line);
 
-  /* Geist for the interface, JetBrains Mono for anything technical. */
-  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  /* Space Grotesk carries the qryntiq logotype. */
-  --font-brand: "Space Grotesk", "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-instrument-serif), ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-brand: var(--font-space-grotesk), var(--font-instrument-sans), ui-sans-serif, sans-serif;
 
-  /* Type scale: 11 / 12 / 13 / 14 / 16 / 18 / 22 / 28 / 32 */
+  /* Type scale: 11 / 12 / 13 / 14 / 16 / 18 / 22 / 28 / 34 / 44 */
   --text-*: initial;
   --text-2xs: 0.6875rem;
   --text-2xs--line-height: 1rem;
@@ -140,7 +158,7 @@
   --text-sm: 0.8125rem;
   --text-sm--line-height: 1.25rem;
   --text-base: 0.875rem;
-  --text-base--line-height: 1.25rem;
+  --text-base--line-height: 1.375rem;
   --text-md: 1rem;
   --text-md--line-height: 1.5rem;
   --text-lg: 1.125rem;
@@ -148,24 +166,67 @@
   --text-xl: 1.375rem;
   --text-xl--line-height: 1.875rem;
   --text-2xl: 1.75rem;
-  --text-2xl--line-height: 2.25rem;
-  --text-3xl: 2rem;
-  --text-3xl--line-height: 2.5rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-3xl: 2.125rem;
+  --text-3xl--line-height: 2.375rem;
+  --text-4xl: 2.75rem;
+  --text-4xl--line-height: 1.05;
 
-  /* Radii: 4 chips · 6 controls · 8 cards */
+  /* Radii: 4 chips · 7 controls · 10 cards · 14 overlays */
   --radius-*: initial;
+  --radius-xs: 3px;
   --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
   --radius-full: 9999px;
 
   --shadow-*: initial;
-  --shadow-overlay: var(--overlay-shadow);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-overlay: var(--shadow-overlay);
+  --shadow-highlight: var(--highlight);
 
-  /* Motion: 120–200ms, no bounce, no overshoot */
-  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
-  --default-transition-duration: 150ms;
+  /* Motion: quick and settled — no bounce, no overshoot */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --default-transition-duration: 160ms;
   --default-transition-timing-function: var(--ease-out);
+
+  --animate-page-in: page-in 320ms var(--ease-out) both;
+  --animate-rise: rise 260ms var(--ease-out) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -179,10 +240,11 @@
   }
 
   html {
-    font-family: var(--font-sans);
+    font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
   }
 
   body {
@@ -197,16 +259,17 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
+    border-radius: 4px;
   }
 
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-subtle);
+    border-color: var(--accent-text);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-text) 18%, transparent);
   }
 
   table,
@@ -217,21 +280,24 @@
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
     background: var(--line-strong);
-    border-radius: 4px;
-    border: 2px solid transparent;
+    border-radius: 999px;
+    border: 3px solid transparent;
     background-clip: padding-box;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--fg-faint);
     background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -246,12 +312,24 @@
   }
 }
 
-/* Monaco sits flush inside the surface. */
+/* Mono eyebrow label: the small technical caption used above titles and
+   inside panels. One definition so every section speaks the same way. */
+@utility eyebrow {
+  font-family: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* Monaco sits flush inside its panel. */
 .monaco-editor .scroll-decoration {
   display: none !important;
 }
 .monaco-editor,
 .monaco-editor .margin,
 .monaco-editor-background {
-  background-color: var(--surface) !important;
+  background-color: var(--editor-bg) !important;
 }

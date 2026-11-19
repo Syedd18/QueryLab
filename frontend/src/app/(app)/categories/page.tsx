@@ -73,6 +73,7 @@ export default function CategoriesPage() {
   return (
     <Page width="wide">
       <PageHeader
+        eyebrow="Workspace · Curriculum"
         title="SQL Topics"
         description="Master SQL one concept at a time — from basic selects to window functions."
       />
@@ -82,7 +83,7 @@ export default function CategoriesPage() {
         <div className="grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
           {summary.map((s) => (
             <div key={s.label} className="bg-surface px-5 py-4">
-              <p className="text-xs text-fg-subtle">{s.label}</p>
+              <p className="eyebrow">{s.label}</p>
               {isLoading ? (
                 <Skeleton className="mt-1.5 h-6 w-16" />
               ) : (
@@ -135,7 +136,7 @@ function CategoryCard({ cat, onOpen }: { cat: CategoryData; onOpen: () => void }
     <button
       type="button"
       onClick={onOpen}
-      className="group flex h-full flex-col rounded-lg border border-line bg-surface p-5 text-left transition-colors hover:border-line-strong hover:bg-surface-2"
+      className="group flex h-full flex-col rounded-lg border border-line bg-surface p-5 text-left shadow-[var(--highlight),var(--shadow-card)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-[var(--highlight),var(--shadow-raised)]"
     >
       <div className="flex items-start justify-between">
         <span className="flex size-10 items-center justify-center rounded-md border border-line bg-surface-2 text-fg-muted transition-colors group-hover:text-fg">

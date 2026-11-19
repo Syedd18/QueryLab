@@ -18,11 +18,11 @@ import { cn } from "@/lib/utils";
 
 type Entry = LeaderboardData["entries"][number];
 
-// Muted medal palette (works in both themes).
+// Medal tones from the token set, so the podium matches both themes.
 const MEDALS = [
-  { ring: "ring-[#c5a36a]/45", chip: "bg-[#c5a36a] text-black", soft: "text-[#c5a36a]", Icon: Crown },
-  { ring: "ring-[#a0a5aa]/45", chip: "bg-[#a0a5aa] text-black", soft: "text-[#a0a5aa]", Icon: Medal },
-  { ring: "ring-[#777f87]/45", chip: "bg-[#777f87] text-white", soft: "text-[#a0a5aa]", Icon: Medal },
+  { numeral: "text-warning", rule: "bg-warning", label: "Gold", Icon: Crown },
+  { numeral: "text-fg-muted", rule: "bg-fg-subtle", label: "Silver", Icon: Medal },
+  { numeral: "text-fg-subtle", rule: "bg-line-strong", label: "Bronze", Icon: Medal },
 ];
 
 export default function LeaderboardPage() {
@@ -42,6 +42,7 @@ export default function LeaderboardPage() {
   return (
     <Page>
       <PageHeader
+        eyebrow="My activity"
         title="Leaderboard"
         description={
           data
@@ -86,6 +87,13 @@ export default function LeaderboardPage() {
       ) : null}
 
       {/* The rest */}
+      {!isLoading && entries.length > 0 && rest.length === 0 ? (
+        <p className="mt-6 flex items-center gap-3 text-xs text-fg-subtle">
+          <span className="h-px flex-1 bg-line" aria-hidden />
+          That&apos;s everyone on the board for now — solve problems to join them.
+          <span className="h-px flex-1 bg-line" aria-hidden />
+        </p>
+      ) : (
       <Card className="mt-4 overflow-hidden">
         <Table>
           <TableHead>
@@ -126,6 +134,7 @@ export default function LeaderboardPage() {
           </TableBody>
         </Table>
       </Card>
+      )}
 
       {/* Your position, if signed in but outside the visible list */}
       {isAuthenticated && data?.current_user_rank && !meInList && user && (
@@ -175,39 +184,41 @@ function PodiumCard({ entry, place, isMe }: { entry: Entry; place: number; isMe:
   return (
     <Card
       className={cn(
-        "relative overflow-hidden p-4",
-        place === 1 && "ring-1",
-        place === 1 && m.ring,
-        isMe && "bg-accent-subtle"
+        "group relative overflow-hidden p-5 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[var(--highlight),var(--shadow-raised)]",
+        isMe && "border-accent-line bg-accent-subtle"
       )}
     >
-      <div className="flex items-center justify-between">
+      <span className={cn("absolute inset-x-0 top-0 h-[3px]", m.rule)} aria-hidden />
+      <div className="flex items-start justify-between">
         <span
-          className={cn(
-            "flex size-7 items-center justify-center rounded-full text-xs font-semibold tabular-nums",
-            m.chip
-          )}
+          className={cn("font-display text-[3.5rem] leading-[0.85] tabular-nums", m.numeral)}
+          aria-label={`Place ${place}`}
         >
           {place}
         </span>
-        <Icon className={cn("size-4", m.soft)} aria-hidden />
+        <span className="eyebrow inline-flex items-center gap-1.5">
+          <Icon className={cn("size-3.5", m.numeral)} aria-hidden />
+          {m.label}
+        </span>
       </div>
 
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-5 flex items-center gap-3">
         <Avatar name={entry.name} src={entry.avatar_url} size="lg" />
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-fg">
             {entry.name}
             {isMe && <Badge tone="accent">You</Badge>}
           </p>
-          <p className="text-xs text-fg-subtle">Rank #{entry.rank}</p>
+          <p className="font-mono text-2xs text-fg-subtle">Rank #{entry.rank}</p>
         </div>
       </div>
 
-      <div className="mt-4 flex items-end justify-between">
+      <div className="mt-5 flex items-end justify-between border-t border-line pt-4">
         <div>
-          <p className="text-xl font-semibold text-fg tabular-nums">{entry.xp.toLocaleString()}</p>
-          <p className="text-2xs text-fg-subtle">XP</p>
+          <p className="text-2xl font-semibold tracking-[-0.02em] text-fg tabular-nums">
+            {entry.xp.toLocaleString()}
+            <span className="ml-1 text-sm font-medium tracking-normal text-fg-subtle">XP</span>
+          </p>
         </div>
         <div className="flex items-center gap-3 text-xs text-fg-subtle tabular-nums">
           <span className="inline-flex items-center gap-1">
@@ -229,7 +240,7 @@ function LeaderRow({ entry, maxXp, isMe }: { entry: Entry; maxXp: number; isMe: 
   return (
     <TableRow selected={isMe}>
       <TableCell align="right">
-        <span className="text-sm text-fg-subtle tabular-nums">{entry.rank}</span>
+        <span className="font-mono text-xs text-fg-subtle tabular-nums">{String(entry.rank).padStart(2, "0")}</span>
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2.5">
@@ -242,7 +253,7 @@ function LeaderRow({ entry, maxXp, isMe }: { entry: Entry; maxXp: number; isMe: 
         <div className="flex items-center gap-2.5">
           <span className="w-14 shrink-0 font-medium text-fg tabular-nums">{entry.xp.toLocaleString()}</span>
           <div className="hidden h-1.5 flex-1 overflow-hidden rounded-full bg-surface-3 sm:block">
-            <div className="h-full rounded-full bg-accent" style={{ width: `${pct}%` }} />
+            <div className="h-full rounded-full bg-accent-text/70" style={{ width: `${pct}%` }} />
           </div>
         </div>
       </TableCell>
