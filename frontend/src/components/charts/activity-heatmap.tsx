@@ -8,14 +8,14 @@ interface Day {
   count: number;
 }
 
-// Brand steel ramp: one hue at rising intensity, so the calendar reads as
-// part of the product in both themes rather than a borrowed GitHub widget.
+// LeetCode-style submission calendar greens (light + dark). In dark mode the
+// ramp runs from deep to bright green, as LeetCode's does.
 const LEVEL_CLASS = [
-  "bg-surface-3",
-  "bg-accent-text/25",
-  "bg-accent-text/45",
-  "bg-accent-text/70",
-  "bg-accent-text",
+  "bg-[#ebebeb] dark:bg-[#393939]",
+  "bg-[#7fe18b] dark:bg-[#016620]",
+  "bg-[#28c244] dark:bg-[#109c2e]",
+  "bg-[#109c2e] dark:bg-[#28c244]",
+  "bg-[#016620] dark:bg-[#7fe18b]",
 ];
 
 function level(count: number): number {

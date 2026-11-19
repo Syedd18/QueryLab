@@ -1,4 +1,8 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://querylab-5kcd.onrender.com/api"
+    : "http://localhost:8001/api");
 
 type FetchOptions = RequestInit & {
   token?: string | null;
